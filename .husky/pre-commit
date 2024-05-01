@@ -1,0 +1,6 @@
+
+npx tsc --noEmit
+
+npm run lint
+
+npx prettier . --write

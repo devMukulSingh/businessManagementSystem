@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - path: ./package.json
+          actions: rebuild
+        - path: ./next.config.js
+          actions: rebuild
+        - path: .
+          target: /app
+          actions: sync
+      environment: DB_URL=process.env.DATABASE_URL
+volumes:
+  tasked:

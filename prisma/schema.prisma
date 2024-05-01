@@ -1,0 +1,140 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+  
+model Store{
+  id          String      @id@default(uuid()) 
+  name        String     
+  userId      String
+  // billboards  Billboard[] @relation("StoreToBillboard")
+  // categories  Category[]  @relation("StoreToCategory")
+  colors      Color[]     @relation("StoreToColor")
+  products    Product[]   @relation("StoreToProduct")
+  orders      Order[]     @relation("StoreToOrder")
+  brands      Brand[]     @relation("StoreToBrand")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+
+model Color{
+  id          String       @id@default(uuid())
+  name        String
+  value       String
+  store       Store        @relation("StoreToColor", fields: [storeId], references: [id],onDelete: Cascade)
+  storeId     String        //foreign key to Store model
+  products    Product[]    @relation("ColorToProduct")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  
+  @@index([storeId])
+}
+
+model Product{
+  id          String          @id@default(uuid())
+  name        String          @db.VarChar(400)
+  quantity    Int             @default(1)
+  price       Int  
+  storeId     String          //foreign key to Store model
+  store       Store           @relation("StoreToProduct",fields:[storeId],references: [id])
+  colorId     String          //foreign key to Color model
+  color       Color           @relation("ColorToProduct",fields: [colorId],references: [id])
+  // categoryId  String          //foreign key to Category model
+  // category    Category        @relation("CategoryToProduct",fields: [categoryId], references: [id])
+  // images      Image[]         @relation("ImageToProduct")
+  orderItems  OrderItem[]     @relation("OrderItemToProduct")
+  brandId     String
+  brand       Brand           @relation("BrandToProduct",fields: [brandId],references: [id])   
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([storeId])
+  @@index([colorId])
+  @@index([brandId])
+}
+
+model Order{
+  id              String        @id@default(uuid())
+  phone           String        @default("")
+  address         String        @default("")
+  isPaid          Boolean       @default(false)
+  orderItems      OrderItem[]     @relation("OrderItemToOrder")                    
+  storeId         String   
+  store           Store           @relation("StoreToOrder",fields:[storeId],references: [id],onDelete: Cascade)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([storeId])
+}
+model OrderItem{
+  id              String          @id@default(uuid())
+  orderId         String
+  order           Order           @relation("OrderItemToOrder",fields: [orderId],references: [id],onDelete: Cascade)
+  productId       String          
+  product         Product         @relation("OrderItemToProduct",fields: [productId],references: [id])
+  
+  @@index([orderId]) //foreign key to Order model
+  @@index([productId]) //foreign key to Product model
+}
+model Brand{
+  id              String          @id@default(uuid())
+  name            String    
+  products        Product[]       @relation("BrandToProduct")
+  storeId         String
+  store           Store           @relation("StoreToBrand",fields: [storeId],references: [id],onDelete: Cascade)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  @@index([storeId])
+}
+
+// model Billboard {
+//   id            String      @id@default(uuid())
+//   storeId       String      //foreign key to Store model
+//   store         Store       @relation("StoreToBillboard",fields:[storeId],references:[id],onDelete: Cascade)
+//   label         String
+//   images        Image[]     @relation("ImageToBillboard")
+//   categories    Category[]  @relation("BillboardToCategory")  
+//   createdAt     DateTime    @default(now())
+//   updatedAt     DateTime    @updatedAt
+
+
+//   @@index([storeId])
+
+// }
+// model Category {
+//   id            String    @id@default(uuid())
+//   storeId       String    //foreign key to Store model
+//   name          String
+//   store         Store     @relation("StoreToCategory", fields: [storeId],references: [id],onDelete: Cascade)
+//   billboard     Billboard @relation("BillboardToCategory",fields: [billboardId],references: [id])
+//   billboardId   String    //foreign key to Category model
+//   products      Product[]  @relation("CategoryToProduct")
+//   createdAt     DateTime  @default(now())
+//   updatedAt     DateTime  @updatedAt
+
+
+//   @@index([storeId])
+//   @@index([billboardId])
+
+// }
+// model Image{
+//   id            String        @id@default(uuid())
+//   url           String
+//   billboardId   String?
+//   billboard     Billboard?     @relation("ImageToBillboard",fields: [billboardId],references: [id])
+//   productId     String?       //foreign key to Product model
+//   product       Product?       @relation("ImageToProduct",fields: [productId],references: [id],onDelete: Cascade)
+//   createdAt     DateTime      @default(now())
+//   updatedAt     DateTime      @updatedAt()
+
+//   @@index([billboardId])
+//   @@index([productId])
+// }
