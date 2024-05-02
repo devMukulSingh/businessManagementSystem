@@ -3,14 +3,22 @@ import React, { FC } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, Form, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  Form,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import useSWRMutation from "swr/mutation";
 import axios from "axios";
-import { ProductColumn } from "../ui/ProductColumn";
+import { ProductColumn } from "../ui/Product/ProductColumn";
 import { useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface IsellModalProps {
   product: ProductColumn;
@@ -20,13 +28,12 @@ interface IsellModalProps {
 }
 interface Iarg {
   quantity: number;
-  productId:string,
-  storeId:string
+  productId: string;
+  storeId: string;
 }
 async function sellProduct(url: string, { arg }: { arg: Iarg }) {
   return await axios.patch(url, arg);
 }
-
 
 const SellModal: FC<IsellModalProps> = ({
   product,
@@ -34,23 +41,27 @@ const SellModal: FC<IsellModalProps> = ({
   isOpen,
   availableQuanity,
 }) => {
-
   const formSchema = z.object({
-    quantity: z
-      .coerce.number({
-        required_error:"Quantity is required",
-        invalid_type_error:"Only numbers allowed"
-      })
+    quantity: z.coerce
+      .number({
+        required_error: "Quantity is required",
+        invalid_type_error: "Only numbers allowed",
+      }).positive()
       .min(1, {
         message: "Quantity cant be 0",
-
       })
       .max(availableQuanity, {
         message: `Quantity exceeds the availble quantities`,
       }),
+      customerName:z.string().optional(),
+      dueAmount : z.coerce.number({
+        invalid_type_error:"Only numbers allowed"
+      }).min(0).max(product.price,{
+        message:"Due amount cant exceed product price"
+      }).optional()
   });
   const { storeId } = useParams();
-  const router = useRouter()
+  const router = useRouter();
   type schema = z.infer<typeof formSchema>;
   const form = useForm<schema>({
     resolver: zodResolver(formSchema),
@@ -63,8 +74,13 @@ const SellModal: FC<IsellModalProps> = ({
     sellProduct
   );
   const onSubmit = async (data: schema) => {
-    await trigger({ quantity: data.quantity,productId:product.id,storeId:storeId.toString() });
+    await trigger({
+      quantity: data.quantity,
+      productId: product.id,
+      storeId: storeId.toString(),
+    });
     onClose();
+    toast.success("Product Sold")
     router.refresh();
   };
   return (
@@ -91,7 +107,35 @@ const SellModal: FC<IsellModalProps> = ({
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormMessage/>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                defaultValue={0}
+                name="dueAmount"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Due amount</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                defaultValue=""
+                name="customerName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Customer name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

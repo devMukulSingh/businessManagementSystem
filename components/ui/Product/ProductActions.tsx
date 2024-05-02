@@ -1,56 +1,46 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "../dropdown-menu";
 import { Copy, Edit, MenuIcon, Trash } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
-import { AlertModal } from "../modals/AlertModal";
+import { AlertModal } from "../../modals/AlertModal";
 import { toast } from "react-hot-toast";
-import { BillboardColumn } from "./BillboardColumn";
+import { ProductColumn } from "./ProductColumn";
 
-interface IcellActionProps {
-  data: BillboardColumn;
+interface IproductActionsProps {
+  data: ProductColumn;
 }
 
-const CellAction: React.FC<IcellActionProps> = ({ data }) => {
-  useEffect(() => {
-    router.prefetch(`/${storeId}/billboards/${billboardId}`);
-  }, []);
+const ProductActions: React.FC<IproductActionsProps> = ({ data }) => {
   const { storeId } = useParams();
-  const { id: billboardId } = data;
+  const { id: productId } = data;
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(billboardId);
-    toast.success(`Billboard Id copied to clipboard`);
+    navigator.clipboard.writeText(productId);
+    toast.success(`product Id copied to clipboard`);
   };
 
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const res = await axios.delete(
-        `/api/${storeId}/billboard/${billboardId}`,
-      );
-      if (res.status === 200) toast.success("Billboard Deleted");
+      const res = await axios.delete(`/api/${storeId}/product/${productId}`);
+      if (res.status === 200) toast.success("product Deleted");
       else if (res.status === 500) toast.error(`Something went wrong`);
       setIsOpen(false);
       router.refresh();
-    } catch (error: any) {
-      if (error.response.data.code === "P2014") {
-        toast.error(
-          `This Billboard is in use, delete the associated Category to continue`,
-        );
-      } else {
-        toast.error(`Something went wrong`);
-      }
+    } catch (error) {
+      toast.error(`Something went wrong`);
+      console.log(`Error in handleDelete ${error}`);
     } finally {
       setLoading(false);
     }
@@ -71,9 +61,7 @@ const CellAction: React.FC<IcellActionProps> = ({ data }) => {
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                router.push(`/${storeId}/billboards/${billboardId}`)
-              }
+              onClick={() => router.push(`/${storeId}/products/${productId}`)}
             >
               <Edit className="mr-3 h-4 w-4" />
               Update
@@ -91,4 +79,4 @@ const CellAction: React.FC<IcellActionProps> = ({ data }) => {
   );
 };
 
-export default CellAction;
+export default ProductActions;

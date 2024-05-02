@@ -1,8 +1,8 @@
 "use client";
 import React, { FC, useState } from "react";
 import { ProductColumn } from "./ProductColumn";
-import { Button } from "./button";
-import SellModal from "../modals/SellModal";
+import { Button } from "../button";
+import SellModal from "../../modals/SellModal";
 
 interface SellButtonProps {
   data: ProductColumn;
@@ -19,7 +19,9 @@ const SellButton: FC<SellButtonProps> = ({ data }) => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
-      <Button onClick={() => setIsOpen(true)}>Sell</Button>
+      <Button
+        disabled={ data.quantity === 0 ? true:false} 
+        onClick={() => setIsOpen(true)}>Sell</Button>
     </>
   );
 };

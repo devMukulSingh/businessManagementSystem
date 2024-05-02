@@ -1,53 +1,32 @@
 import React, { FC } from "react";
 import { OrdersClientCompProps } from "./OrdersClientComp";
 import { DataTable } from "@/components/commons/DataTable";
-import { columns } from "@/components/ui/OrdersColumn";
+import { columns } from "@/components/ui/Order/OrdersColumn";
 import { prisma } from "@/lib/prisma";
-import { OrderItem } from "@prisma/client";
 import { format } from "date-fns";
 
-interface IorderItem extends OrderItem {
-  product: {
-    name: string;
-    price: number;
-    isFeatured: Boolean;
-    isArchived: Boolean;
-  };
-}
+// interface IorderItem extends OrderItem {
+//   product: {
+//     name: string;
+//     price: number;
+//     isFeatured: Boolean;
+//     isArchived: Boolean;
+//   };
+// }
 
 const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
   const orders = await prisma.order.findMany({
     where: {
       storeId: storeId,
     },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
-        },
-      },
-    },
     orderBy: {
       updatedAt: "desc",
     },
+    select:{
+      product:true
+    }
   });
 
-  const formattedOrders = orders.map((item) => ({
-    id: item.id,
-    phone: item.phone,
-    address: item.address,
-    isPaid: item.isPaid,
-    products: item.orderItems
-      .map((orderItem: IorderItem) => orderItem.product.name)
-      .join(","),
-    totalPrice: item.orderItems.reduce(
-      (prevPrice: number, orderItem: IorderItem) => {
-        return prevPrice + orderItem.product.price;
-      },
-      0,
-    ),
-    createdAt: format(item.updatedAt, "dd/MMM/yyyy HH:mm a"),
-  }));
 
   return (
     <>
@@ -57,7 +36,7 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
           <p className="text-sm text-slate-500">Manage orders</p>
         </div>
       </header>
-      <DataTable columns={columns} data={formattedOrders} />
+      {/* <DataTable columns={columns} data={orders} /> */}
     </>
   );
 };

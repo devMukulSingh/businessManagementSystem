@@ -7,8 +7,11 @@ import SellButton from "./SellButton";
 export type ProductColumn = {
   id: string;
   name: string;
-  color: string;
-  quantity:number,
+  color: {
+    name:string,
+    value:string
+  };
+  quantity: number;
   price: number;
   brand: string;
   // category: string;
@@ -32,13 +35,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Price",
   },
   {
-    accessorKey: "color",
+    accessorKey: "color.name",
     header: "Color",
   },
-  {
-    accessorKey: "createdAt",
-    header: "Date",
-  },
+
   {
     accessorKey: "brand",
     header: "Brand",
@@ -48,8 +48,12 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Quantity",
   },
   {
-    id:"actions",
-    cell : ({row}) => <SellButton data={row.original}/>
+    accessorKey: "createdAt",
+    header: "Date",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <SellButton data={row.original} />,
   },
   {
     id: "actions",

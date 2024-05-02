@@ -39,22 +39,24 @@ model Color{
 }
 
 model Product{
-  id          String          @id@default(uuid())
-  name        String          @db.VarChar(400)
-  quantity    Int             @default(1)
-  price       Int  
-  storeId     String          //foreign key to Store model
-  store       Store           @relation("StoreToProduct",fields:[storeId],references: [id])
-  colorId     String          //foreign key to Color model
-  color       Color           @relation("ColorToProduct",fields: [colorId],references: [id])
+  id                    String          @id@default(uuid())
+  name                  String          @db.VarChar(400)
+  quantityAvailable     Int             @default(1)
+  quantitySold          Int             @default(0)
+  price                 Int  
+  storeId               String          //foreign key to Store model
+  store                 Store           @relation("StoreToProduct",fields:[storeId],references: [id])
+  colorId               String          //foreign key to Color model
+  color                 Color           @relation("ColorToProduct",fields: [colorId],references: [id])
+  // orderItems            OrderItem?       @relation("OrderItemToProduct")
+  brandId                String
+  brand                  Brand           @relation("BrandToProduct",fields: [brandId],references: [id])   
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+  orders                   Order[]          @relation("OrderToProduct")
   // categoryId  String          //foreign key to Category model
   // category    Category        @relation("CategoryToProduct",fields: [categoryId], references: [id])
   // images      Image[]         @relation("ImageToProduct")
-  orderItems  OrderItem[]     @relation("OrderItemToProduct")
-  brandId     String
-  brand       Brand           @relation("BrandToProduct",fields: [brandId],references: [id])   
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
 
   @@index([storeId])
   @@index([colorId])
@@ -63,27 +65,26 @@ model Product{
 
 model Order{
   id              String        @id@default(uuid())
-  phone           String        @default("")
-  address         String        @default("")
-  isPaid          Boolean       @default(false)
-  orderItems      OrderItem[]     @relation("OrderItemToOrder")                    
+  dueAmount       Int           @default(0)
+  customerName    String?        
+  productId     String     
+  product        Product      @relation("OrderToProduct",fields: [productId],references: [id])                    
   storeId         String   
   store           Store           @relation("StoreToOrder",fields:[storeId],references: [id],onDelete: Cascade)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
   @@index([storeId])
+  @@index([productId])
 }
-model OrderItem{
-  id              String          @id@default(uuid())
-  orderId         String
-  order           Order           @relation("OrderItemToOrder",fields: [orderId],references: [id],onDelete: Cascade)
-  productId       String          
-  product         Product         @relation("OrderItemToProduct",fields: [productId],references: [id])
+// model OrderItem{
+//   id              String          @id@default(uuid())
+//   order           Order?           @relation("OrderItemToOrder")
+//   productId       String          @unique
+//   product         Product         @relation("OrderItemToProduct",fields: [productId],references: [id])
   
-  @@index([orderId]) //foreign key to Order model
-  @@index([productId]) //foreign key to Product model
-}
+//   @@index([productId]) //foreign key to Product model
+// }
 model Brand{
   id              String          @id@default(uuid())
   name            String    

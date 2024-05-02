@@ -4,15 +4,10 @@ export const getOrders = async (storeId: string) => {
   try {
     const orders = await prisma.order.findMany({
       where: {
-        isPaid: true,
         storeId,
       },
       include: {
-        orderItems: {
-          include: {
-            product: true,
-          },
-        },
+        
       },
     });
     return orders;

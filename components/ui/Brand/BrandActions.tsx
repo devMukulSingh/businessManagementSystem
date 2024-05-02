@@ -1,47 +1,53 @@
 "use client";
 import React, { useState } from "react";
-import { SizeColumn } from "./SizeColumn";
+import { BrandColumn } from "./BrandColumn";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "../dropdown-menu";
 import { Copy, Edit, Menu, Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { AlertModal } from "../modals/AlertModal";
+import { AlertModal } from "../../modals/AlertModal";
 
-interface IsizeActionsProps {
-  data: SizeColumn;
+interface BrandActionsProps {
+  data: BrandColumn;
 }
 
-const SizeActions: React.FC<IsizeActionsProps> = ({ data }) => {
+const BrandActions: React.FC<BrandActionsProps> = ({ data }) => {
   const { storeId } = useParams();
-  const { id: sizeId } = data;
+  const { id: brandId } = data;
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(sizeId);
-    toast.success(`Size Id copied to clipboard`);
+    navigator.clipboard.writeText(brandId);
+    toast.success(`brand Id copied to clipboard`);
   };
 
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const res = await axios.delete(`/api/${storeId}/size/${sizeId}`);
-      if (res.status === 200) toast.success("Size Deleted");
+      const res = await axios.delete(`/api/${storeId}/brand/${brandId}`);
+      if (res.status === 200) toast.success("Brand Deleted");
       else if (res.status === 500) toast.error(`Something went wrong`);
       setIsOpen(false);
       router.refresh();
-    } catch (error) {
-      toast.error(`Something went wrong`);
-      console.log(`Error in handleDelete ${error}`);
+    } catch (error: any) {
+      if (error.response.data.code === "P2014") {
+        toast.error(
+          `This brand is in use, delete the associated Product to continue`
+        );
+      } else {
+        toast.error(`Something went wrong`);
+      }
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -61,12 +67,12 @@ const SizeActions: React.FC<IsizeActionsProps> = ({ data }) => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem className="" onClick={() => handleCopy()}>
-            <Copy className="w-4 h-4 mr-3" /> Copy size Id
+            <Copy className="w-4 h-4 mr-3" /> Copy brand Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${storeId}/sizes/${sizeId}`)}
+            onClick={() => router.push(`/${storeId}/brands/${brandId}`)}
           >
-            <Edit className="w-4 h-4 mr-3" /> Edit size
+            <Edit className="w-4 h-4 mr-3" /> Edit brand
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsOpen(true)}>
             <Trash className="w-4 h-4 mr-3" /> Delete
@@ -77,4 +83,4 @@ const SizeActions: React.FC<IsizeActionsProps> = ({ data }) => {
   );
 };
 
-export default SizeActions;
+export default BrandActions;

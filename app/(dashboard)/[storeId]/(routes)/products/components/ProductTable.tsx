@@ -4,7 +4,7 @@ import { DataTable } from "@/components/commons/DataTable";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import { ProductClientCompProps } from "./ProductClientComp";
-import { columns } from "@/components/ui/ProductColumn";
+import { columns } from "@/components/ui/Product/ProductColumn";
 
 const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
   const products = await prisma.product.findMany({
@@ -23,10 +23,10 @@ const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
     id: item.id,
     name: item.name,
     price: item.price,
-    color: item.color.value,
+    color: item.color,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
     brand: item.brand.name,
-    quantity:item.quantity
+    quantity: item.quantityAvailable,
     // description: item?.description?.map((description: string) => description),
     // isFeatured: item.isFeatured,
     // category: item.category.name,

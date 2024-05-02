@@ -78,7 +78,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
       : {
           name: "",
           price: 0,
-          quantity:1,
+          quantity:0,
           colorId: "",
           brandId: "",
         },
@@ -247,6 +247,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
                   <FormItem>
                     <FormLabel>Brand</FormLabel>
                     <Select
+                      disabled={loading}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       value={field.value}

@@ -12,11 +12,11 @@ export interface ProductClientCompProps {
 
 const ProductClientComp: React.FC<ProductClientCompProps> = ({ storeId }) => {
   return (
-    <main className="flex flex-col gap-4 p-5">
+    <div className="flex flex-col gap-4 p-5">
       <ProductTable storeId={storeId} />
       <Separator />
       <ApiList entityIdName="{productId}" entityName="product" />
-    </main>
+    </div>
   );
 };
 

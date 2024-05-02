@@ -56,6 +56,7 @@ export async function PATCH(
       brandId,
       price,
       colorId,
+      quantity,
       // categoryId,
       // isArchived,
       // isFeatured,
@@ -96,8 +97,6 @@ export async function PATCH(
 
     // if(!description) return NextResponse.json({ error:'description is required',{status:400});
 
-
-
     const storeByUserId = await prisma.store.findUnique({
       where: {
         userId,
@@ -123,6 +122,7 @@ export async function PATCH(
         colorId,
         storeId,
         brandId,
+        quantityAvailable:quantity
         // ratings,
         // sizeId,
         // categoryId,

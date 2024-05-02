@@ -4,9 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest, res: NextResponse,){
     try{
-        // console.log(params);
         
-        const { quantity ,productId, storeId } = await req.json();
+        const { quantity ,productId, storeId,dueAmount,customerName="" } = await req.json();
 
         if(!quantity||quantity===0) return NextResponse.json({
             error:"Quantity is required"
@@ -30,11 +29,24 @@ export async function PATCH(req: NextRequest, res: NextResponse,){
                 storeId,
             },
             data:{
-                quantity:{
+                quantityAvailable:{
                     decrement:quantity
+                },
+                quantitySold:{
+                    increment:quantity
                 }
             }
         });
+
+        await prisma.order.create({
+            data:{
+                dueAmount,
+                customerName,
+                productId:updatedProduct.id,
+                storeId              
+            },
+
+        })
 
         return NextResponse.json({msg:"Product updated",updatedProduct},{status:200})
     }

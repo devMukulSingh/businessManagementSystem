@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Header from "./Header";
-import { BrandColumn, columns } from "@/components/ui/BrandColumn";
+import { BrandColumn, columns } from "@/components/ui/Brand/BrandColumn";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import { DataTable } from "@/components/commons/DataTable";

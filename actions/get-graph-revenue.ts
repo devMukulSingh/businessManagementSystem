@@ -9,21 +9,17 @@ export const getGraphRevenue = async (storeId: string) => {
   try {
     const orders = await prisma.order.findMany({
       where: {
-        isPaid: true,
         storeId,
-      },
-      include: {
-        orderItems: {
-          include: {
-            product: true,
-          },
+        dueAmount:{
+          equals:0
         },
       },
+      select:{
+        product:true
+      }
     });
 
-    const totalOrders = orders
-      ?.map((item) => item.orderItems.map((item) => item.product))
-      .flat();
+    const totalOrders = orders.map(item => item.product);
 
     const graphData: IgraphData[] = [
       { name: "Jan", total: 0 },

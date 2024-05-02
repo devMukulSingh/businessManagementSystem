@@ -13,7 +13,7 @@ export const productSchema = z.object({
     price: z.coerce.number().positive().min(1, {
         message: "Price is required",
     }),
-    quantity: z.number({
+    quantity: z.coerce.number({
         required_error:"Quantity is required",
         invalid_type_error:"Only numbers allowed"
     }).min(1),
