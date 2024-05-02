@@ -22,11 +22,19 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
     orderBy: {
       updatedAt: "desc",
     },
-    select:{
+    include:{
       product:true
     }
   });
 
+  const formattedOrders = orders.map(item => ({
+    id:item.product.id,
+    productName:item.product.name,
+    price:item.product.price,
+    createdAt: format(item.createdAt,"dd/MMM/yyyy kk:mm:ss"),
+    dueAmount:item.dueAmount,
+    isPaymentDue:item.dueAmount===0?"No":"Yes"
+  }))
 
   return (
     <>
@@ -36,7 +44,7 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
           <p className="text-sm text-slate-500">Manage orders</p>
         </div>
       </header>
-      {/* <DataTable columns={columns} data={orders} /> */}
+      <DataTable columns={columns} data={formattedOrders} />
     </>
   );
 };
