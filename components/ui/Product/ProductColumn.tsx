@@ -8,8 +8,8 @@ export type ProductColumn = {
   id: string;
   name: string;
   color: {
-    name:string,
-    value:string
+    name: string;
+    value: string;
   };
   quantity: number;
   price: number;

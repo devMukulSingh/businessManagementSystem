@@ -6,9 +6,7 @@ export const getOrders = async (storeId: string) => {
       where: {
         storeId,
       },
-      include: {
-        
-      },
+      include: {},
     });
     return orders;
   } catch (e) {

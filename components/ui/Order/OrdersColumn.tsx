@@ -10,7 +10,7 @@ export type OrdersColumn = {
   price: number;
   createdAt: string;
   dueAmount: number;
-  isPaymentDue:string
+  isPaymentDue: string;
 };
 
 export const columns: ColumnDef<OrdersColumn>[] = [

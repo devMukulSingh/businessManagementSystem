@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { TrashIcon } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Brand,  Color,  Product } from "@prisma/client";
+import { Brand, Color, Product } from "@prisma/client";
 import React, { useRef, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
@@ -37,7 +37,7 @@ import { productSchema } from "@/lib/formSchemas";
 export interface IinitialValues {
   name: string | undefined;
   price: number | undefined;
-  quantity:number
+  quantity: number;
   colorId: string | undefined;
   // sizeId: string | undefined;
   // categoryId: string | undefined;
@@ -78,7 +78,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
       : {
           name: "",
           price: 0,
-          quantity:0,
+          quantity: 0,
           colorId: "",
           brandId: "",
         },

@@ -42,7 +42,7 @@ const BrandActions: React.FC<BrandActionsProps> = ({ data }) => {
     } catch (error: any) {
       if (error.response.data.code === "P2014") {
         toast.error(
-          `This brand is in use, delete the associated Product to continue`
+          `This brand is in use, delete the associated Product to continue`,
         );
       } else {
         toast.error(`Something went wrong`);

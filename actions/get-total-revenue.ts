@@ -5,12 +5,11 @@ export const getTotalRevenue = async (storeId: string) => {
     const orders = await prisma.order.findMany({
       where: {
         storeId,
-        dueAmount:0
+        dueAmount: 0,
       },
-      include:{
-        product:true
-      }
-
+      include: {
+        product: true,
+      },
     });
 
     //getting current Month
@@ -22,7 +21,10 @@ export const getTotalRevenue = async (storeId: string) => {
     );
 
     //calculating total revenue
-    const totalRevenue = orders.reduce( (prev,curr) => prev+curr.product.price ,0)
+    const totalRevenue = orders.reduce(
+      (prev, curr) => prev + curr.product.price,
+      0,
+    );
 
     return { totalRevenue, currMonthOrders: currMonthOrders.length };
   } catch (e) {

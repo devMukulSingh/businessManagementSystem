@@ -46,19 +46,24 @@ const SellModal: FC<IsellModalProps> = ({
       .number({
         required_error: "Quantity is required",
         invalid_type_error: "Only numbers allowed",
-      }).positive()
+      })
+      .positive()
       .min(1, {
         message: "Quantity cant be 0",
       })
       .max(availableQuanity, {
         message: `Quantity exceeds the availble quantities`,
       }),
-      customerName:z.string().optional(),
-      dueAmount : z.coerce.number({
-        invalid_type_error:"Only numbers allowed"
-      }).min(0).max(product.price,{
-        message:"Due amount cant exceed product price"
-      }).optional()
+    customerName: z.string().optional(),
+    dueAmount: z.coerce
+      .number({
+        invalid_type_error: "Only numbers allowed",
+      })
+      .min(0)
+      .max(product.price, {
+        message: "Due amount cant exceed product price",
+      })
+      .optional(),
   });
   const { storeId } = useParams();
   const router = useRouter();
@@ -71,7 +76,7 @@ const SellModal: FC<IsellModalProps> = ({
   });
   const { trigger, isMutating } = useSWRMutation(
     `/api/${storeId}/product/${product.id}/sell-product`,
-    sellProduct
+    sellProduct,
   );
   const onSubmit = async (data: schema) => {
     await trigger({
@@ -80,7 +85,7 @@ const SellModal: FC<IsellModalProps> = ({
       storeId: storeId.toString(),
     });
     onClose();
-    toast.success("Product Sold")
+    toast.success("Product Sold");
     router.refresh();
   };
   return (

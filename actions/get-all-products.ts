@@ -6,8 +6,11 @@ export const getAllProducts = async (storeId: string) => {
       storeId,
     },
   });
-  const totalProducts = products.reduce( (prev,curr) => prev+curr.quantityAvailable,0 );
+  const totalProducts = products.reduce(
+    (prev, curr) => prev + curr.quantityAvailable,
+    0,
+  );
   console.log(totalProducts);
-  
+
   return totalProducts;
 };

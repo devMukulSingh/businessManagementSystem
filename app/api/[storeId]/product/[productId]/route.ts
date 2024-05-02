@@ -11,7 +11,7 @@ export async function GET(
   },
 ) {
   try {
-    const { productId,storeId } = params;
+    const { productId, storeId } = params;
 
     if (!productId)
       return NextResponse.json(
@@ -26,7 +26,7 @@ export async function GET(
     const product = await prisma.product.findUnique({
       where: {
         id: productId,
-        storeId
+        storeId,
       },
       // include: {
       //   images: true,
@@ -122,7 +122,7 @@ export async function PATCH(
         colorId,
         storeId,
         brandId,
-        quantityAvailable:quantity
+        quantityAvailable: quantity,
         // ratings,
         // sizeId,
         // categoryId,

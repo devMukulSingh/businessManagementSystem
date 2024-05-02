@@ -43,7 +43,7 @@ const ColorActions: React.FC<IcolorActionsProps> = ({ data }) => {
     } catch (error: any) {
       if (error.response.data.code === "P2014") {
         toast.error(
-          `This color is in use, delete the associated Product to continue`
+          `This color is in use, delete the associated Product to continue`,
         );
       } else {
         toast.error(`Something went wrong`);

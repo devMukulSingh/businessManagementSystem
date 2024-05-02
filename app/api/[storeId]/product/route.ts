@@ -9,13 +9,7 @@ export async function POST(
   try {
     const { userId } = auth();
     const body = await req.json();
-    const {
-      name,
-      quantity,
-      price,
-      colorId,
-      brandId,
-    } = body;
+    const { name, quantity, price, colorId, brandId } = body;
     const { storeId } = params;
 
     if (!userId)
@@ -35,8 +29,7 @@ export async function POST(
         { error: "Store id is required" },
         { status: 400 },
       );
-    
-    
+
     if (!name)
       return NextResponse.json({ error: "name required" }, { status: 400 });
 
@@ -57,7 +50,6 @@ export async function POST(
     if (!price)
       return NextResponse.json({ error: "price is required" }, { status: 400 });
 
-
     if (!brandId)
       return NextResponse.json(
         { error: "brandId is required" },
@@ -74,7 +66,7 @@ export async function POST(
       data: {
         name,
         price,
-        quantityAvailable:quantity,
+        quantityAvailable: quantity,
         storeId,
         colorId,
         brandId,
@@ -91,8 +83,6 @@ export async function POST(
     return NextResponse.json(error, { status: 500 });
   }
 }
-
-
 
 export async function GET(
   req: Request,

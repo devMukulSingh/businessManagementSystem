@@ -1,6 +1,6 @@
 import ProductForm from "@/app/(dashboard)/[storeId]/(routes)/products/[productId]/components/ProductForm";
 import { prisma } from "@/lib/prisma";
-import { Brand,  Color,} from "@prisma/client";
+import { Brand, Color } from "@prisma/client";
 
 const SingleProductPage = async ({
   params,
@@ -13,7 +13,6 @@ const SingleProductPage = async ({
     where: {
       id: productId,
     },
-
   });
   const colors: Color[] = await prisma.color.findMany({
     where: {

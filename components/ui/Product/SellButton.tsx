@@ -20,8 +20,11 @@ const SellButton: FC<SellButtonProps> = ({ data }) => {
         onClose={() => setIsOpen(false)}
       />
       <Button
-        disabled={ data.quantity === 0 ? true:false} 
-        onClick={() => setIsOpen(true)}>Sell</Button>
+        disabled={data.quantity === 0 ? true : false}
+        onClick={() => setIsOpen(true)}
+      >
+        Sell
+      </Button>
     </>
   );
 };

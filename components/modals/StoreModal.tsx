@@ -88,10 +88,7 @@ export const StoreModal = () => {
                             mt-5
                         "
             >
-              <Button
-                className="flex gap-3"  
-                disabled={loading} 
-                type="submit">
+              <Button className="flex gap-3" disabled={loading} type="submit">
                 Continue
                 {loading && <Loader2 className="flex gap-3 animate-spin" />}
               </Button>
