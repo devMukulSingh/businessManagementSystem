@@ -53,7 +53,7 @@ const ProductActions: React.FC<IproductActionsProps> = ({ data }) => {
         onConform={handleDelete}
         onClose={() => setIsOpen(false)}
       />
-      <main>
+      <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <MenuIcon className="cursor-pointer" />
@@ -74,7 +74,7 @@ const ProductActions: React.FC<IproductActionsProps> = ({ data }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </main>
+      </div>
     </>
   );
 };

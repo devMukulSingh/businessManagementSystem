@@ -11,17 +11,22 @@ export async function GET(
   },
 ) {
   try {
-    const { productId } = params;
+    const { productId,storeId } = params;
 
     if (!productId)
       return NextResponse.json(
         { error: "product id is required" },
         { status: 400 },
       );
-
+    if (!storeId)
+      return NextResponse.json(
+        { error: "store id is required" },
+        { status: 400 },
+      );
     const product = await prisma.product.findUnique({
       where: {
         id: productId,
+        storeId
       },
       // include: {
       //   images: true,

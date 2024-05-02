@@ -24,6 +24,7 @@ export const productSchema = z.object({
         message: "Brand is required",
     }),
 })
+
     // images: z
     //     .object({
     //         url: z.string().min(1, {
