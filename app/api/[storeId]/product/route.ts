@@ -14,13 +14,6 @@ export async function POST(
       quantity,
       price,
       colorId,
-      sizeId,
-      images,
-      categoryId,
-      isArchived,
-      isFeatured,
-      description,
-      ratings,
       brandId,
     } = body;
     const { storeId } = params;
@@ -81,7 +74,7 @@ export async function POST(
       data: {
         name,
         price,
-        quantity,
+        quantityAvailable:quantity,
         storeId,
         colorId,
         brandId,
