@@ -1,15 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import {Form} from "@/components/ui/form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { TrashIcon } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,20 +14,26 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/AlertModal";
 import Loader from "@/components/commons/Loader";
+import ColorName from "./ColorName";
+import ColorValue from "./ColorValue";
+import { colorSchema } from "@/lib/formSchemas";
 
 interface IcolorFormProps {
   initialValues: Color | null;
 }
+export interface Iform {
+  form: UseFormReturn<
+    {
+      value: string;
+      name: string;
+    },
+    any,
+    undefined
+  >;
+  loading?:boolean
+}
 
-const formSchema = z.object({
-  value: z.string().trim().min(1, {
-    message: "Color value is required",
-  }),
-  name: z.string().trim().min(1, {
-    message: "Color name is required",
-  }),
-});
-type colorFormValues = z.infer<typeof formSchema>;
+type colorFormValues = z.infer<typeof colorSchema>;
 
 const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
   const [openDeleteAlert, setOpenDeleteAlert] = useState<boolean>(false);
@@ -45,7 +43,7 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<colorFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(colorSchema),
     defaultValues: initialValues || {
       name: "",
       value: "",
@@ -93,7 +91,7 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
         onClose={() => setOpenDeleteAlert(false)}
         onConform={handleColorDelete}
       />
-      <main className="flex flex-col gap-6 px-10 py-2">
+      <div className="flex flex-col gap-6 px-10 py-2">
         <header className="flex justify-between ">
           <section>
             <h1 className="text-2xl font-bold">
@@ -116,44 +114,8 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex gap-4 flex-col">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Color name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="name"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-
-              <FormField
-                control={form.control}
-                name="value"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hex value</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="value"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-
+              <ColorName form={form} loading={loading} />
+              <ColorValue form={form} loading={loading} />
               <Button
                 type="submit"
                 className="w-32 cursor-pointer flex gap-2"
@@ -165,7 +127,7 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
             </div>
           </form>
         </Form>
-      </main>
+      </div>
     </>
   );
 };

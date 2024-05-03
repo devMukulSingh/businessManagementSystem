@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { Iform } from '../ProductForm';
+import React, { FC } from "react";
+import { Iform } from "../ProductForm";
 import {
   Form,
   FormControl,
@@ -9,11 +9,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 
-const ProductName:FC<Iform> = ({
-    form,loading
-}) => {
+const ProductName: FC<Iform> = ({ form, loading }) => {
   return (
     <>
       <FormField
@@ -36,6 +34,6 @@ const ProductName:FC<Iform> = ({
       ></FormField>
     </>
   );
-}
+};
 
-export default ProductName
+export default ProductName;

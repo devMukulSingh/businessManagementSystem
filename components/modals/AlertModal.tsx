@@ -8,6 +8,7 @@ interface IalertModalProps {
   onConform: () => void;
   onClose: () => void;
   loading: boolean;
+  children?: React.ReactNode;
 }
 
 export const AlertModal: React.FC<IalertModalProps> = ({
@@ -15,6 +16,7 @@ export const AlertModal: React.FC<IalertModalProps> = ({
   onClose,
   isOpen,
   loading,
+  children
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -30,7 +32,7 @@ export const AlertModal: React.FC<IalertModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
     >
-      {" "}
+      {children}
       <footer className="flex gap-5">
         <Button disabled={loading} variant="destructive" onClick={onConform}>
           Continue

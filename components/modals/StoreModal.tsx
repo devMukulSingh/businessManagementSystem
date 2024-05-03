@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -31,6 +32,7 @@ export const StoreModal = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const isOpen = useAppSelector((state) => state.adminSlice.isOpen);
   const dispatch = useAppDispatch();
+  const { user } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,7 +44,10 @@ export const StoreModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`/api/stores`, values);
+      const { data } = await axios.post(`/api/stores`, {
+        name: values.name,
+        user,
+      });
       dispatch(setDialog(false));
       router.refresh();
     } catch (error) {

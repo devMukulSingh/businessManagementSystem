@@ -1,30 +1,30 @@
-import React, { FC } from "react";
-import { Iform } from "../ProductForm";
+import React, { FC } from 'react'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
+import { Iform } from './BrandForm';
 
-const Quantity: FC<Iform> = ({ form, loading }) => {
+const BrandField:FC<Iform> = ({
+    form,loading
+}) => {
   return (
     <>
       <FormField
-        defaultValue={1}
         control={form.control}
-        name="quantity"
+        name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Quantity</FormLabel>
+            <FormLabel>Brand name</FormLabel>
             <FormControl>
               <Input
                 disabled={loading}
-                placeholder="quantity"
+                placeholder="brand"
                 {...field}
                 autoComplete="off"
               />
@@ -35,6 +35,6 @@ const Quantity: FC<Iform> = ({ form, loading }) => {
       ></FormField>
     </>
   );
-};
+}
 
-export default Quantity;
+export default BrandField

@@ -25,13 +25,12 @@ const SingleProductPage = async ({
     },
   });
 
-
   const formattedProducts = {
     name: product?.name,
     price: product?.price,
     colorId: product?.colorId,
     brandId: product?.brandId,
-    quantity:product?.quantityAvailable
+    quantity: product?.quantityAvailable,
   };
 
   return (

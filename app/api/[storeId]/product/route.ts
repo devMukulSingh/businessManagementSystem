@@ -90,7 +90,7 @@ export async function GET(
 ) {
   try {
     const { storeId } = params;
-
+    const { userId } = auth()
     if (!storeId)
       return NextResponse.json(
         { error: "Store id is required" },

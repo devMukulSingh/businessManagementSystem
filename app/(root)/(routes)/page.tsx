@@ -9,7 +9,7 @@ import { useUser } from "@clerk/nextjs";
 export default function Home() {
   const { user } = useUser();
   const dispatch = useAppDispatch();
-
+  
   return (
     <>
       <div className="w-screen h-screen flex items-center justify-center">

@@ -1,8 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { TrashIcon } from "lucide-react";
 import * as z from "zod";
@@ -49,8 +47,8 @@ export interface Iform {
     undefined
   >;
   loading?: boolean;
-  colors?:Color[];
-  brands?:Brand[]
+  colors?: Color[];
+  brands?: Brand[];
 }
 type productFormValues = z.infer<typeof productSchema>;
 
@@ -152,9 +150,27 @@ const ProductForm: React.FC<IproductFormProps> = ({
               <Price form={form} />
               <Colors colors={colors} form={form} />
               <Quantity form={form} />
+            </div>
+            <Button
+              type="submit"
+              className="w-32 cursor-pointer mt-5 flex gap-2"
+              disabled={loading}
+            >
+              {isInitalValues ? "Save Changes" : "Create"}
+              {loading && <Loader />}
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </>
+  );
+};
 
-              {/* category */}
-              {/* <FormField
+export default ProductForm;
+
+
+              {
+                /* <FormField
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
@@ -182,10 +198,14 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              ></FormField> */}
+              ></FormField> */
+              }
 
-              {/* isfeatured */}
-              {/* <FormField
+              {
+                /* isfeatured */
+              }
+              {
+                /* <FormField
                 control={form.control}
                 name="isFeatured"
                 render={({ field }) => (
@@ -204,12 +224,18 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     </FormDescription>
                   </FormItem>
                 )}
-              ></FormField> */}
+              ></FormField> */
+              }
 
-              {/* description */}
-              {/* inside field object
-                            {name: 'description', value: Array(0), onChange: ƒ, onBlur: ƒ, ref: ƒ} */}
-              {/* <FormField
+              {
+                /* description */
+              }
+              {
+                /* inside field object
+                            {name: 'description', value: Array(0), onChange: ƒ, onBlur: ƒ, ref: ƒ} */
+              }
+              {
+                /* <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
@@ -227,10 +253,10 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              ></FormField> */}
-
-              {/* Archived */}
-              {/* <FormField
+              ></FormField> */
+              }
+              {
+                /* <FormField
                 control={form.control}
                 name="isArchived"
                 render={({ field }) => (
@@ -248,9 +274,11 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     </FormDescription>
                   </FormItem>
                 )}
-              ></FormField> */}
+              ></FormField> */
+              }
 
-              {/* <FormField
+              {
+                /* <FormField
                 control={form.control}
                 name="ratings"
                 render={({ field }) => (
@@ -262,10 +290,11 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              ></FormField> */}
+              ></FormField> */
+              }
 
-              {/* image */}
-              {/* <FormField
+              {
+                /* <FormField
                 control={form.control}
                 name="images"
                 render={({ field }) => (
@@ -290,22 +319,5 @@ const ProductForm: React.FC<IproductFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              ></FormField> */}
-            </div>
-
-            <Button
-              type="submit"
-              className="w-32 cursor-pointer mt-5 flex gap-2"
-              disabled={loading}
-            >
-              {isInitalValues ? "Save Changes" : "Create"}
-              {loading && <Loader />}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </>
-  );
-};
-
-export default ProductForm;
+              ></FormField> */
+              }

@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { Iform } from '../ProductForm';
+import React, { FC } from "react";
+import { Iform } from "../ProductForm";
 import {
   Form,
   FormControl,
@@ -9,11 +9,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 
-const Price:FC<Iform> = ({
-    form,loading
-}) => {
+const Price: FC<Iform> = ({ form, loading }) => {
   return (
     <>
       <FormField
@@ -36,6 +34,6 @@ const Price:FC<Iform> = ({
       ></FormField>
     </>
   );
-}
+};
 
-export default Price
+export default Price;

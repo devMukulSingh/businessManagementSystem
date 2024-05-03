@@ -1,33 +1,40 @@
 import { prisma } from "@/lib/prisma";
-import { store } from "@/store/store";
-import { auth } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
     const body = await req.json();
-    const { name } = body;
-
-    if (!name) {
-      return NextResponse.json({ error: "body is required" }, { status: 401 });
-    }
-    if (!userId) {
+    const { name,user } = body;
+    
+    if (!user) {
       return NextResponse.json(
-        { error: "userId is required" },
+        { error: "user is required" },
         { status: 401 },
       );
+    };
+    
+    if (!name) {
+      return NextResponse.json({ error: "name is required" }, { status: 401 });
     }
 
     const store = await prisma.store.create({
       data: {
-        userId,
+        userId:user.id,
         name,
       },
     });
+
+    await prisma.user.create({
+      data: {
+        id: user.id ,
+        name: user.fullName ,
+        email: user.primaryEmailAddress.emailAddress ,
+      }
+    })
+
     return NextResponse.json(store, { status: 200 });
   } catch (error) {
-    console.log(`Error in get stores handler ${error}`);
+    console.log(`Error in get stores handler` ,error);
     return NextResponse.json(error, { status: 500 });
   }
 }

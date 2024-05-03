@@ -9,31 +9,38 @@ datasource db {
   relationMode = "prisma"
 }
   
+model User{
+  id        String          @unique
+  name      String          
+  email     String          @unique  
+  stores    Store[]         @relation("UserToStore")
+}
+
 model Store{
   id          String      @id@default(uuid()) 
-  name        String     
+  name        String      
   userId      String
-  // billboards  Billboard[] @relation("StoreToBillboard")
-  // categories  Category[]  @relation("StoreToCategory")
+  user        User        @relation("UserToStore",references: [id],fields: [userId])      
   colors      Color[]     @relation("StoreToColor")
   products    Product[]   @relation("StoreToProduct")
   orders      Order[]     @relation("StoreToOrder")
   brands      Brand[]     @relation("StoreToBrand")
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  // billboards  Billboard[] @relation("StoreToBillboard")
+  // categories  Category[]  @relation("StoreToCategory")
+  @@index([userId])
 }
-
 
 model Color{
   id          String       @id@default(uuid())
-  name        String
-  value       String
+  name        String     
+  value       String      
   store       Store        @relation("StoreToColor", fields: [storeId], references: [id],onDelete: Cascade)
   storeId     String        //foreign key to Store model
   products    Product[]    @relation("ColorToProduct")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-
   
   @@index([storeId])
 }
@@ -87,7 +94,7 @@ model Order{
 // }
 model Brand{
   id              String          @id@default(uuid())
-  name            String    
+  name            String          
   products        Product[]       @relation("BrandToProduct")
   storeId         String
   store           Store           @relation("StoreToBrand",fields: [storeId],references: [id],onDelete: Cascade)

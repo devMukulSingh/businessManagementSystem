@@ -1,9 +1,7 @@
-import React, { FC } from 'react'
-import { Iform } from '../ProductForm';
+import React, { FC, useState } from "react";
+import { Iform } from "../ProductForm";
 import {
-  Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,11 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-const Colors:FC<Iform> = ({
-    form,loading,colors
-}) => {
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import AddColorModal from "@/components/modals/AddColorModal";
+const Colors: FC<Iform> = ({ form, loading, colors }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => {
+    setIsOpen(false);
+  }
   return (
     <>
+    <AddColorModal isOpen={isOpen} onClose={handleOnClose} />
       <FormField
         control={form.control}
         name="colorId"
@@ -44,6 +48,14 @@ const Colors:FC<Iform> = ({
                     {color.name}
                   </SelectItem>
                 ))}
+                <Button
+                  onClick={() => setIsOpen(true)}
+                  variant="ghost"
+                  className="flex gap-2 w-full justify-start"
+                >
+                  <PlusCircle />
+                  Add Color
+                </Button>
               </SelectContent>
               <FormMessage />
             </Select>
@@ -52,6 +64,6 @@ const Colors:FC<Iform> = ({
       ></FormField>
     </>
   );
-}
+};
 
-export default Colors
+export default Colors;

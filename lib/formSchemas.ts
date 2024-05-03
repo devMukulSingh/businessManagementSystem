@@ -27,6 +27,22 @@ export const productSchema = z.object({
   }),
 });
 
+
+export const brandSchema = z.object({
+  name: z.string().trim().min(1, {
+    message: "Brand name is required",
+  }),
+});
+
+export const colorSchema = z.object({
+  value: z.string().trim().min(1, {
+    message: "Color value is required",
+  }),
+  name: z.string().trim().min(1, {
+    message: "Color name is required",
+  }),
+});
+
 // images: z
 //     .object({
 //         url: z.string().min(1, {

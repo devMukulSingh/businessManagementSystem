@@ -11,9 +11,9 @@ const SingleBrandPage = async ({ params }: { params: { brandId: string } }) => {
   });
 
   return (
-    <main>
+    <>
       <BrandForm initialValues={brands} />
-    </main>
+    </>
   );
 };
 
