@@ -80,7 +80,7 @@ const SellModal: FC<IsellModalProps> = ({
   );
   const onSubmit = async (data: schema) => {
     await trigger({
-      quantity: data.quantity,
+      ...data,
       productId: product.id,
       storeId: storeId.toString(),
     });

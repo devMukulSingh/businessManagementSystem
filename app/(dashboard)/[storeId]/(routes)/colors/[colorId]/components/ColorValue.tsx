@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { Iform } from './ColorForm'
+import React, { FC } from "react";
+import { Iform } from "./ColorForm";
 import {
   FormControl,
   FormField,
@@ -7,11 +7,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 
-const ColorValue:FC<Iform> = ({
-    form,loading
-}) => {
+const ColorValue: FC<Iform> = ({ form, loading }) => {
   return (
     <FormField
       control={form.control}
@@ -32,6 +30,6 @@ const ColorValue:FC<Iform> = ({
       )}
     ></FormField>
   );
-}
+};
 
-export default ColorValue
+export default ColorValue;

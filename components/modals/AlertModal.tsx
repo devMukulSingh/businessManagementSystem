@@ -16,7 +16,7 @@ export const AlertModal: React.FC<IalertModalProps> = ({
   onClose,
   isOpen,
   loading,
-  children
+  children,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {

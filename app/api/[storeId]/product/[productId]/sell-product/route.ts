@@ -10,6 +10,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
       dueAmount,
       customerName = "",
     } = await req.json();
+    
 
     if (!quantity || quantity === 0)
       return NextResponse.json(

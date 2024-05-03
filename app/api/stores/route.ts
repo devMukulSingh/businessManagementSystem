@@ -4,37 +4,34 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name,user } = body;
-    
+    const { name, user } = body;
+
     if (!user) {
-      return NextResponse.json(
-        { error: "user is required" },
-        { status: 401 },
-      );
-    };
-    
+      return NextResponse.json({ error: "user is required" }, { status: 401 });
+    }
+
     if (!name) {
       return NextResponse.json({ error: "name is required" }, { status: 401 });
     }
 
     const store = await prisma.store.create({
       data: {
-        userId:user.id,
+        userId: user.id,
         name,
       },
     });
 
     await prisma.user.create({
       data: {
-        id: user.id ,
-        name: user.fullName ,
-        email: user.primaryEmailAddress.emailAddress ,
-      }
-    })
+        id: user.id,
+        name: user.fullName,
+        email: user.primaryEmailAddress.emailAddress,
+      },
+    });
 
     return NextResponse.json(store, { status: 200 });
   } catch (error) {
-    console.log(`Error in get stores handler` ,error);
+    console.log(`Error in get stores handler`, error);
     return NextResponse.json(error, { status: 500 });
   }
 }

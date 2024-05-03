@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
 import {
   Form,
   FormControl,
@@ -7,12 +7,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
-import { Iform } from './BrandForm';
+import { Input } from "@/components/ui/input";
+import { Iform } from "./BrandForm";
 
-const BrandField:FC<Iform> = ({
-    form,loading
-}) => {
+const BrandField: FC<Iform> = ({ form, loading }) => {
   return (
     <>
       <FormField
@@ -35,6 +33,6 @@ const BrandField:FC<Iform> = ({
       ></FormField>
     </>
   );
-}
+};
 
-export default BrandField
+export default BrandField;

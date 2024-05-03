@@ -168,9 +168,8 @@ const ProductForm: React.FC<IproductFormProps> = ({
 
 export default ProductForm;
 
-
-              {
-                /* <FormField
+{
+  /* <FormField
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
@@ -199,13 +198,13 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
+}
 
-              {
-                /* isfeatured */
-              }
-              {
-                /* <FormField
+{
+  /* isfeatured */
+}
+{
+  /* <FormField
                 control={form.control}
                 name="isFeatured"
                 render={({ field }) => (
@@ -225,17 +224,17 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
+}
 
-              {
-                /* description */
-              }
-              {
-                /* inside field object
+{
+  /* description */
+}
+{
+  /* inside field object
                             {name: 'description', value: Array(0), onChange: ƒ, onBlur: ƒ, ref: ƒ} */
-              }
-              {
-                /* <FormField
+}
+{
+  /* <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
@@ -254,9 +253,9 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
-              {
-                /* <FormField
+}
+{
+  /* <FormField
                 control={form.control}
                 name="isArchived"
                 render={({ field }) => (
@@ -275,10 +274,10 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
+}
 
-              {
-                /* <FormField
+{
+  /* <FormField
                 control={form.control}
                 name="ratings"
                 render={({ field }) => (
@@ -291,10 +290,10 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
+}
 
-              {
-                /* <FormField
+{
+  /* <FormField
                 control={form.control}
                 name="images"
                 render={({ field }) => (
@@ -320,4 +319,4 @@ export default ProductForm;
                   </FormItem>
                 )}
               ></FormField> */
-              }
+}

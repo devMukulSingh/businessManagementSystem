@@ -13,8 +13,8 @@ import Loader from "@/components/commons/Loader";
 import { brandSchema } from "@/lib/formSchemas";
 import BrandField from "../../../brands/[brandId]/components/BrandField";
 import useSWRMutation from "swr/mutation";
-interface BrandFormDialogProps{
-  onClose : () => void;
+interface BrandFormDialogProps {
+  onClose: () => void;
 }
 export interface Iform {
   form: UseFormReturn<
@@ -27,19 +27,17 @@ export interface Iform {
   loading?: boolean;
 }
 type ClientFormValues = z.infer<typeof brandSchema>;
-interface Iarg{
-  name:string
+interface Iarg {
+  name: string;
 }
-async function sendRequest(url:string, { arg } : { arg: Iarg}){
-  await axios.post(url,arg )
+async function sendRequest(url: string, { arg }: { arg: Iarg }) {
+  await axios.post(url, arg);
 }
-const BrandFormDialog: React.FC<BrandFormDialogProps> = ({
-  onClose
-}) => {
+const BrandFormDialog: React.FC<BrandFormDialogProps> = ({ onClose }) => {
   const { storeId } = useParams();
   const { isMutating, error, trigger } = useSWRMutation(
     `/api/${storeId}/brand`,
-    sendRequest
+    sendRequest,
   );
   const router = useRouter();
 

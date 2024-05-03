@@ -22,17 +22,13 @@ import { Plus, PlusCircle } from "lucide-react";
 import AddBrandModal from "@/components/modals/AddBrandModal";
 
 const Brands: FC<Iform> = ({ form, loading, brands }) => {
-      const [isOpen, setIsOpen] = useState(false);
-      const handleOnClose = () => {
-        setIsOpen(false);
-        
-      }
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => {
+    setIsOpen(false);
+  };
   return (
     <>
-    <AddBrandModal
-      isOpen={isOpen}
-      onClose={handleOnClose}
-    />
+      <AddBrandModal isOpen={isOpen} onClose={handleOnClose} />
       <FormField
         name="brandId"
         control={form.control}

@@ -27,7 +27,6 @@ export const productSchema = z.object({
   }),
 });
 
-
 export const brandSchema = z.object({
   name: z.string().trim().min(1, {
     message: "Brand name is required",

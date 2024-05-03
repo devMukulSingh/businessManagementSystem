@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {Form} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { TrashIcon } from "lucide-react";
 import * as z from "zod";
@@ -30,7 +30,7 @@ export interface Iform {
     any,
     undefined
   >;
-  loading?:boolean
+  loading?: boolean;
 }
 
 type colorFormValues = z.infer<typeof colorSchema>;

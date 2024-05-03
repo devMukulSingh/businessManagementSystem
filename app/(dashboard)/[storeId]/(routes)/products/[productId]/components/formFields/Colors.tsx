@@ -21,10 +21,10 @@ const Colors: FC<Iform> = ({ form, loading, colors }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => {
     setIsOpen(false);
-  }
+  };
   return (
     <>
-    <AddColorModal isOpen={isOpen} onClose={handleOnClose} />
+      <AddColorModal isOpen={isOpen} onClose={handleOnClose} />
       <FormField
         control={form.control}
         name="colorId"
