@@ -19,7 +19,7 @@ const ProductName: FC<Iform> = ({ form, loading }) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>product name</FormLabel>
+            <FormLabel>Product name</FormLabel>
             <FormControl>
               <Input
                 disabled={loading}

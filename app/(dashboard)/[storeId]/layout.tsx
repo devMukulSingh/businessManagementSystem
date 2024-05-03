@@ -26,10 +26,10 @@ export default async function DashboardLayout({
   if (!store) redirect("/");
 
   return (
-    <>
+    <div className="w-full min-h-screen">
       <Navbar storeId={storeId} />
       {/* <Sidebar /> */}
       {children}
-    </>
+    </div>
   );
 }

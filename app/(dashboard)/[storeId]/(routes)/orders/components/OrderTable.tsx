@@ -34,6 +34,7 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
     createdAt: format(item.createdAt, "dd/MMM/yyyy kk:mm:ss"),
     dueAmount: item.dueAmount,
     isPaymentDue: item.dueAmount === 0 ? "No" : "Yes",
+    customerName:item.customerName
   }));
 
   return (

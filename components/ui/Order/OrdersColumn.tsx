@@ -11,6 +11,7 @@ export type OrdersColumn = {
   createdAt: string;
   dueAmount: number;
   isPaymentDue: string;
+  customerName:string | null
 };
 
 export const columns: ColumnDef<OrdersColumn>[] = [
@@ -33,6 +34,10 @@ export const columns: ColumnDef<OrdersColumn>[] = [
   {
     accessorKey: "isPaymentDue",
     header: "Payment due",
+  },
+  {
+    accessorKey: "customerName",
+    header:"Customer name"
   },
   {
     accessorKey: "createdAt",
