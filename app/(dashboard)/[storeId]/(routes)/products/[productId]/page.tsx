@@ -25,31 +25,18 @@ const SingleProductPage = async ({
     },
   });
 
-  // const categories: Category[] = await prisma.category.findMany({
-  //   where: {
-  //     storeId,
-  //   },
-  // });
 
   const formattedProducts = {
     name: product?.name,
     price: product?.price,
     colorId: product?.colorId,
-    //@ts-ignore
     brandId: product?.brandId,
-    // images: product?.images,
-    // description: product?.description?.map((point: string) => point).join("\n"),
-    // ratings: product?.ratings,
-    // categoryId: product?.categoryId,
-    // sizeId: product?.sizeId,
-    // featured: product?.isFeatured,
-    // archived: product?.isArchived,
+    quantity:product?.quantityAvailable
   };
 
   return (
     <>
       <ProductForm
-        //@ts-ignore
         initialValues={formattedProducts}
         colors={colors}
         brands={brands}

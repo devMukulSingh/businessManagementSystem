@@ -2,15 +2,8 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { TrashIcon } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,38 +16,42 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/AlertModal";
 import ImageUpload from "@/components/ui/image-upload";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
 import Loader from "@/components/commons/Loader";
 import { productSchema } from "@/lib/formSchemas";
+import { BrandColumn } from "@/components/ui/Brand/BrandColumn";
+import { ColorColumn } from "@/components/ui/Color/ColorColumn";
+import ProductName from "./formFields/ProductName";
+import Brands from "./formFields/Brands";
+import Colors from "./formFields/Colors";
+import Price from "./formFields/Price";
+import Quantity from "./formFields/Quantity";
 export interface IinitialValues {
   name: string | undefined;
   price: number | undefined;
-  quantity: number;
+  quantity: number | undefined;
   colorId: string | undefined;
-  // sizeId: string | undefined;
-  // categoryId: string | undefined;
-  // archived: boolean | undefined;
-  // featured: boolean | undefined;
-  // description: string | undefined;
-  // ratings: number | undefined;
-  // images: Image[] | undefined;
 }
 interface IproductFormProps {
   initialValues: IinitialValues;
   colors: Color[];
   brands: Brand[];
-  // categories: Category[];
-  // sizes: Size[];
 }
-
+export interface Iform {
+  form: UseFormReturn<
+    {
+      name: string;
+      price: number;
+      quantity: number;
+      colorId: string;
+      brandId: string;
+    },
+    any,
+    undefined
+  >;
+  loading?: boolean;
+  colors?:Color[];
+  brands?:Brand[]
+}
 type productFormValues = z.infer<typeof productSchema>;
 
 const ProductForm: React.FC<IproductFormProps> = ({
@@ -78,7 +75,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
       : {
           name: "",
           price: 0,
-          quantity: 0,
+          quantity: 1,
           colorId: "",
           brandId: "",
         },
@@ -150,161 +147,12 @@ const ProductForm: React.FC<IproductFormProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid grid-cols-3 gap-5">
-              {/* name */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>product name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="name"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
+              <ProductName form={form} />
+              <Brands brands={brands} form={form} />
+              <Price form={form} />
+              <Colors colors={colors} form={form} />
+              <Quantity form={form} />
 
-              {/* price */}
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="price"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-
-              {/* quantity */}
-              <FormField
-                defaultValue={1}
-                control={form.control}
-                name="quantity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quantity</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="quantity"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="colorId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Color</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={loading}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="SelectColor" />
-                        </SelectTrigger>
-                      </FormControl>
-
-                      <SelectContent>
-                        {colors.map((color) => (
-                          <SelectItem value={color.id} key={color.id}>
-                            {color.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                      <FormMessage />
-                    </Select>
-                  </FormItem>
-                )}
-              ></FormField>
-              {/* Brand */}
-              <FormField
-                name="brandId"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Brand</FormLabel>
-                    <Select
-                      disabled={loading}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <SelectTrigger>
-                        <FormControl>
-                          <SelectValue placeholder="Select brand" />
-                        </FormControl>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {brands.map((brand) => (
-                          <SelectItem value={brand.id} key={brand.id}>
-                            {brand.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* size */}
-              {/* <FormField
-                                control={form.control}
-                                name="sizeId"                            
-                                render = { ({field}) => (
-                                <FormItem>
-                                    <FormLabel>Size</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange} 
-                                        value={field.value}             
-                                        disabled={loading}              
-                                        defaultValue={field.value} 
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="SelectSize"/>
-                                            </SelectTrigger>
-                                        </FormControl>
-
-                                        <SelectContent>
-                                            {
-                                                sizes.map( (size) => (
-                                                    <SelectItem
-                                                        value={size.id}
-                                                        key={size.id}
-                                                    >
-                                                        {size.name}
-                                                    </SelectItem>
-                                                ) )
-                                            }
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
-                                )}
-                            >
-                            </FormField> */}
               {/* category */}
               {/* <FormField
                 control={form.control}
