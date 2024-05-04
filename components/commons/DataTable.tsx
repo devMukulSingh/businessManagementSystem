@@ -15,8 +15,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import TableSkeleton from "./TableSkeleton";
+import SearchBar from "./SearchBar";
 
 interface IdataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -27,14 +28,16 @@ export function DataTable<TData, TValue>({
   data,
   columns,
 }: IdataTableProps<TData, TValue>) {
+  const [tableData, setTableData] = useState(data)
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
   return (
-    <div>
+    <div className="flex flex-col gap-5">
+      <SearchBar tableData={data} setTableData={setTableData} />
       <div>
         <Table>
           <TableHeader>
@@ -48,7 +51,7 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                       </TableHead>
                     );
@@ -70,7 +73,7 @@ export function DataTable<TData, TValue>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}

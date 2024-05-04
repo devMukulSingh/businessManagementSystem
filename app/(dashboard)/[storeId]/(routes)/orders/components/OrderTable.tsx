@@ -29,12 +29,12 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
 
   const formattedOrders = orders.map((item) => ({
     id: item.product.id,
-    productName: item.product.name,
+    name: item.product.name,
     price: item.product.price,
     createdAt: format(item.createdAt, "dd/MMM/yyyy kk:mm:ss"),
     dueAmount: item.dueAmount,
     isPaymentDue: item.dueAmount === 0 ? "No" : "Yes",
-    customerName:item.customerName
+    customerName: item.customerName,
   }));
 
   return (
