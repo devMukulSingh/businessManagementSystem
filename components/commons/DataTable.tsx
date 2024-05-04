@@ -28,7 +28,7 @@ export function DataTable<TData, TValue>({
   data,
   columns,
 }: IdataTableProps<TData, TValue>) {
-  const [tableData, setTableData] = useState(data)
+  const [tableData, setTableData] = useState(data);
   const table = useReactTable({
     data: tableData,
     columns,
@@ -51,7 +51,7 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -73,7 +73,7 @@ export function DataTable<TData, TValue>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}

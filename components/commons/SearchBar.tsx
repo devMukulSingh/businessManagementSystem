@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Input } from "../ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 interface SearchBarProps {
   tableData: any;
@@ -8,15 +8,26 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ tableData, setTableData }: SearchBarProps) {
+const [query, setQuery] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
     const query = e.target.value.trim().toLowerCase();
-    const filterdData = tableData.filter((item: any) =>
-      item?.name.toLowerCase().includes(query) 
-        || 
-    item?.customerName.toLowerCase().includes(query)
-    );
-    setTableData(filterdData);
+    if(query!==""){
+        const filterdData = tableData.filter(
+            (item: any) =>
+                item?.name.toLowerCase().includes(query) ||
+            item?.customerName.toLowerCase().includes(query),
+        );
+        setTableData(filterdData);
+    }
+    else setTableData(tableData);
   };
+  console.log("render");
+  
+  const handleClearSearch = () => {
+    setQuery("");
+    setTableData(tableData);
+  }
   return (
     <div className="flex justify-center">
       <div
@@ -37,8 +48,12 @@ export function SearchBar({ tableData, setTableData }: SearchBarProps) {
         <Input
           className="focus-visible:ring-0 border-0 focus-visible:ring-offset-0 "
           onChange={handleChange}
+          value={query}
           placeholder="Type here to search..."
         />
+        <X 
+            onClick={handleClearSearch}
+            className="cursor-pointer"/>
       </div>
     </div>
   );
