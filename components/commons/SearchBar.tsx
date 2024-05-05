@@ -8,26 +8,24 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ tableData, setTableData }: SearchBarProps) {
-const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
+    setQuery(e.target.value);
     const query = e.target.value.trim().toLowerCase();
-    if(query!==""){
-        const filterdData = tableData.filter(
-            (item: any) =>
-                item?.name.toLowerCase().includes(query) ||
-            item?.customerName.toLowerCase().includes(query),
-        );
-        setTableData(filterdData);
-    }
-    else setTableData(tableData);
+    if (query !== "") {
+      const filterdData = tableData.filter(
+        (item: any) =>
+          item?.name.toLowerCase().includes(query) ||
+          item?.customerName.toLowerCase().includes(query),
+      );
+      setTableData(filterdData);
+    } else setTableData(tableData);
   };
-  console.log("render");
-  
+
   const handleClearSearch = () => {
     setQuery("");
     setTableData(tableData);
-  }
+  };
   return (
     <div className="flex justify-center">
       <div
@@ -51,10 +49,8 @@ const [query, setQuery] = useState("");
           value={query}
           placeholder="Type here to search..."
         />
-        <X 
-            onClick={handleClearSearch}
-            className="cursor-pointer"/>
-      </div>
+        <X onClick={handleClearSearch} className="cursor-pointer" />
+          </div>
     </div>
   );
 }
