@@ -17,7 +17,7 @@ const BrandField: FC<Iform> = ({ form, loading }) => {
         control={form.control}
         name="name"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="max-w-[30rem]">
             <FormLabel>Brand name</FormLabel>
             <FormControl>
               <Input

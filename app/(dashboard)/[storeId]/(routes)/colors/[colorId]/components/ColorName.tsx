@@ -15,7 +15,7 @@ const ColorName: FC<Iform> = ({ form, loading }) => {
       control={form.control}
       name="name"
       render={({ field }) => (
-        <FormItem className="w-1/3">
+        <FormItem className="max-w-[30rem]  ">
           <FormLabel>Color name</FormLabel>
           <FormControl>
             <Input

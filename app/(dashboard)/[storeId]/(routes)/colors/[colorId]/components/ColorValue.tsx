@@ -11,26 +11,25 @@ import {
 } from "@/components/ui/form";
 
 const ColorValue: FC<Iform> = ({ form, loading }) => {
-  const[color,setColor ] = useColor("#000000")
+  const [color, setColor] = useColor("#000000");
   return (
     <FormField
       control={form.control}
       name="value"
       render={({ field }) => (
-        <FormItem className="w-1/3">
+        <FormItem className="max-w-[30rem]">
           <FormLabel>Hex value</FormLabel>
           <FormControl>
             <ColorPicker
               hideInput={["rgb", "hsv"]}
               color={color}
-              onChange={ (selected) => {
+              onChange={(selected) => {
                 console.log(selected);
-                
+
                 setColor(selected);
                 field.onChange(selected.hex);
               }}
             />
- 
           </FormControl>
           <FormMessage />
         </FormItem>

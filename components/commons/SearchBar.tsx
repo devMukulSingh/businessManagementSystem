@@ -50,7 +50,7 @@ export function SearchBar({ tableData, setTableData }: SearchBarProps) {
           placeholder="Type here to search..."
         />
         <X onClick={handleClearSearch} className="cursor-pointer" />
-          </div>
+      </div>
     </div>
   );
 }
