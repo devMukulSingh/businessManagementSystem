@@ -13,11 +13,8 @@ import { useParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/AlertModal";
-import ImageUpload from "@/components/ui/image-upload";
 import Loader from "@/components/commons/Loader";
 import { productSchema } from "@/lib/formSchemas";
-import { BrandColumn } from "@/components/ui/Brand/BrandColumn";
-import { ColorColumn } from "@/components/ui/Color/ColorColumn";
 import ProductName from "./formFields/ProductName";
 import Brands from "./formFields/Brands";
 import Colors from "./formFields/Colors";
@@ -28,9 +25,10 @@ export interface IinitialValues {
   price: number | undefined;
   quantity: number | undefined;
   colorId: string | undefined;
+  brandId:string | undefined
 }
 interface IproductFormProps {
-  initialValues: IinitialValues;
+  initialValues: IinitialValues | null;
   colors: Color[];
   brands: Brand[];
 }
@@ -62,11 +60,10 @@ const ProductForm: React.FC<IproductFormProps> = ({
   const router = useRouter();
   const { storeId, productId } = params;
   const [loading, setLoading] = useState(false);
-  const isInitalValues = Object.keys(initialValues).length > 0;
 
   const form = useForm<productFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: isInitalValues
+    defaultValues: initialValues
       ? {
           ...initialValues,
         }
@@ -81,7 +78,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
   const onSubmit = async (data: productFormValues) => {
     try {
       setLoading(true);
-      if (isInitalValues) {
+      if (initialValues) {
         await axios.patch(`/api/${storeId}/product/${productId}`, data);
         toast.success("product updated");
         router.push(`/${storeId}/products`);
@@ -126,12 +123,12 @@ const ProductForm: React.FC<IproductFormProps> = ({
         <header className="flex justify-between ">
           <section>
             <h1 className="text-2xl font-bold">
-              {isInitalValues ? `Edit product` : `Create product`}
+              {initialValues ? `Edit product` : `Create product`}
             </h1>
             <p className="text-sm">Manage Product Preferences</p>
           </section>
           <Button
-            className={`${Object.keys(initialValues).length === 0 ? "hidden" : ""}`}
+            className={`${!initialValues ? "hidden" : ""}`}
             onClick={() => setOpenDeleteAlert(true)}
             disabled={loading}
             variant="destructive"
@@ -156,7 +153,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
               className="w-32 cursor-pointer mt-5 flex gap-2"
               disabled={loading}
             >
-              {isInitalValues ? "Save Changes" : "Create"}
+              {initialValues ? "Save Changes" : "Create"}
               {loading && <Loader />}
             </Button>
           </form>

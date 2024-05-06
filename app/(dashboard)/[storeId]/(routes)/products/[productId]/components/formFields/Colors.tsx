@@ -17,11 +17,26 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import AddColorModal from "@/components/modals/AddColorModal";
-const Colors: FC<Iform> = ({ form, loading, colors }) => {
+import { useParams } from "next/navigation";
+import { fetcher } from "@/lib/utils";
+import useSWR from "swr";
+import Loader from "@/components/commons/Loader";
+import { Color } from "@prisma/client";
+const Colors: FC<Iform> = ({ form, loading }) => {
+  const { storeId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => {
     setIsOpen(false);
   };
+    const { data, error, isLoading } = useSWR(
+      `/api/${storeId}/color`,
+      fetcher,
+      {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+      }
+    );
+    if (error) console.log(`Error in getCategories`, error);
   return (
     <>
       <AddColorModal isOpen={isOpen} onClose={handleOnClose} />
@@ -34,16 +49,20 @@ const Colors: FC<Iform> = ({ form, loading, colors }) => {
             <Select
               onValueChange={field.onChange}
               value={field.value}
-              disabled={loading}
+              disabled={loading || isLoading}
             >
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="SelectColor" />
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
+                    <SelectValue placeholder="SelectColor" />
+                  )}
                 </SelectTrigger>
               </FormControl>
 
               <SelectContent>
-                {colors?.map((color) => (
+                {data?.map((color:Color) => (
                   <SelectItem value={color.id} key={color.id}>
                     {color.name}
                   </SelectItem>

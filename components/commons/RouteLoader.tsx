@@ -1,4 +1,3 @@
-
 "use client";
 import { Triangle } from "react-loader-spinner";
 
@@ -16,6 +15,6 @@ const RouteLoader = () => {
       />
     </>
   );
-}
+};
 
-export default RouteLoader
+export default RouteLoader;

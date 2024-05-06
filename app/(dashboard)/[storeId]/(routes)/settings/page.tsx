@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
   const { userId } = auth();
 
-  console.log("userId", userId);
   if (!userId) redirect("/");
 
   const store = await prisma.store.findFirst({

@@ -16,16 +16,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, PlusCircle } from "lucide-react";
 import AddBrandModal from "@/components/modals/AddBrandModal";
+import { Brand } from "@prisma/client";
+import { useParams } from "next/navigation";
+import useSWR from "swr"
+import { fetcher } from "@/lib/utils";
+import Loader from "@/components/commons/Loader";
 
-const Brands: FC<Iform> = ({ form, loading, brands }) => {
+const Brands: FC<Iform> = ({ form, loading }) => {
+  const { storeId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => {
     setIsOpen(false);
   };
+    const { data, error, isLoading } = useSWR(
+      `/api/${storeId}/brand`,
+      fetcher,
+      {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+      }
+    );
+    if (error) console.log(`Error in getCategories`, error);
   return (
     <>
       <AddBrandModal isOpen={isOpen} onClose={handleOnClose} />
@@ -36,18 +50,21 @@ const Brands: FC<Iform> = ({ form, loading, brands }) => {
           <FormItem>
             <FormLabel>Brand</FormLabel>
             <Select
-              disabled={loading}
+              disabled={loading || isLoading}
               onValueChange={field.onChange}
               defaultValue={field.value}
               value={field.value}
             >
               <SelectTrigger>
                 <FormControl>
-                  <SelectValue placeholder="Select brand" />
+                  {
+                    isLoading ? <Loader/> : 
+                    <SelectValue placeholder="Select brand" />
+                  }
                 </FormControl>
               </SelectTrigger>
               <SelectContent>
-                {brands?.map((brand) => (
+                {data?.map((brand: Brand) => (
                   <SelectItem value={brand.id} key={brand.id}>
                     {brand.name}
                   </SelectItem>

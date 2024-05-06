@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import RouteLoader from "@/components/commons/RouteLoader";
 
 const loading = () => {
@@ -7,6 +7,6 @@ const loading = () => {
       <RouteLoader />
     </div>
   );
-}
+};
 
-export default loading
+export default loading;

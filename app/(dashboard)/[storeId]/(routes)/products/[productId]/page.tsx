@@ -9,29 +9,31 @@ const SingleProductPage = async ({
 }) => {
   const { productId, storeId } = params;
 
-  const product = await prisma.product.findUnique({
-    where: {
-      id: productId,
-    },
+  let formattedProducts = null;
+  if(productId!=='new') {
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
   });
-  const colors: Color[] = await prisma.color.findMany({
-    where: {
-      storeId,
-    },
-  });
-  const brands: Brand[] = await prisma.brand.findMany({
-    where: {
-      storeId,
-    },
-  });
-
-  const formattedProducts = {
+  formattedProducts = {
     name: product?.name,
     price: product?.price,
     colorId: product?.colorId,
     brandId: product?.brandId,
     quantity: product?.quantityAvailable,
   };
+}
+    const colors: Color[] = await prisma.color.findMany({
+      where: {
+        storeId,
+      },
+    });
+    const brands: Brand[] = await prisma.brand.findMany({
+      where: {
+        storeId,
+      },
+    });
 
   return (
     <>

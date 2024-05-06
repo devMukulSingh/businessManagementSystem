@@ -27,6 +27,7 @@ const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
     brand: item.brand.name,
     quantity: item.quantityAvailable,
+    
     // description: item?.description?.map((description: string) => description),
     // isFeatured: item.isFeatured,
     // category: item.category.name,
