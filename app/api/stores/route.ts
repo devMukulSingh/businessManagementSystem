@@ -20,7 +20,14 @@ export async function POST(req: Request) {
         name,
       },
     });
-
+    
+    const isUserExists = await prisma.user.findUnique({
+      where:{
+        id:user.id
+      }
+    })
+    
+    if(!isUserExists)
     await prisma.user.create({
       data: {
         id: user.id,

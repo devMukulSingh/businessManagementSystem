@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/AlertModal";
 import Loader from "@/components/commons/Loader";
 import ColorName from "./ColorName";
-const ColorValue = dynamic( () => import("./ColorValue"))
+const ColorValue = dynamic(() => import("./ColorValue"));
 import { colorSchema } from "@/lib/formSchemas";
 import dynamic from "next/dynamic";
 

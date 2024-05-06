@@ -28,15 +28,11 @@ const Colors: FC<Iform> = ({ form, loading }) => {
   const handleOnClose = () => {
     setIsOpen(false);
   };
-    const { data, error, isLoading } = useSWR(
-      `/api/${storeId}/color`,
-      fetcher,
-      {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-      }
-    );
-    if (error) console.log(`Error in getCategories`, error);
+  const { data, error, isLoading } = useSWR(`/api/${storeId}/color`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+  if (error) console.log(`Error in getCategories`, error);
   return (
     <>
       <AddColorModal isOpen={isOpen} onClose={handleOnClose} />
@@ -62,7 +58,7 @@ const Colors: FC<Iform> = ({ form, loading }) => {
               </FormControl>
 
               <SelectContent>
-                {data?.map((color:Color) => (
+                {data?.map((color: Color) => (
                   <SelectItem value={color.id} key={color.id}>
                     {color.name}
                   </SelectItem>

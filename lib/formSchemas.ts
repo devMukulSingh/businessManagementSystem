@@ -41,7 +41,17 @@ export const colorSchema = z.object({
     message: "Color name is required",
   }),
 });
+export const settingsSchema =  z.object({
+  name: z.string().trim().min(1, {
+    message: "Store name is required",
+  }),
+});
 
+export const storeSchema = z.object({
+  name: z.string().trim().min(1, {
+    message: "Store name is required",
+  }),
+});
 // images: z
 //     .object({
 //         url: z.string().min(1, {

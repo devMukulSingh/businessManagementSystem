@@ -21,7 +21,7 @@ import { Plus, PlusCircle } from "lucide-react";
 import AddBrandModal from "@/components/modals/AddBrandModal";
 import { Brand } from "@prisma/client";
 import { useParams } from "next/navigation";
-import useSWR from "swr"
+import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
 import Loader from "@/components/commons/Loader";
 
@@ -31,15 +31,11 @@ const Brands: FC<Iform> = ({ form, loading }) => {
   const handleOnClose = () => {
     setIsOpen(false);
   };
-    const { data, error, isLoading } = useSWR(
-      `/api/${storeId}/brand`,
-      fetcher,
-      {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-      }
-    );
-    if (error) console.log(`Error in getCategories`, error);
+  const { data, error, isLoading } = useSWR(`/api/${storeId}/brand`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+  if (error) console.log(`Error in getCategories`, error);
   return (
     <>
       <AddBrandModal isOpen={isOpen} onClose={handleOnClose} />
@@ -57,10 +53,11 @@ const Brands: FC<Iform> = ({ form, loading }) => {
             >
               <SelectTrigger>
                 <FormControl>
-                  {
-                    isLoading ? <Loader/> : 
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
                     <SelectValue placeholder="Select brand" />
-                  }
+                  )}
                 </FormControl>
               </SelectTrigger>
               <SelectContent>

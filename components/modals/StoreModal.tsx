@@ -20,42 +20,43 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import useSWRMutation from "swr/mutation";
+import { storeSchema } from "@/lib/formSchemas";
+import toast from "react-hot-toast";
+import type { UserResource } from "@clerk/types";
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: "Store name is required",
-  }),
-});
-
+type TformFieldValues = z.infer<typeof storeSchema>;
+interface Iarg {
+  name: string;
+  user: UserResource | null | undefined;
+}
+async function createStore(url: string, { arg }: { arg: Iarg }) {
+  return axios.post(url, arg);
+}
 export const StoreModal = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
   const isOpen = useAppSelector((state) => state.adminSlice.isOpen);
   const dispatch = useAppDispatch();
   const { user } = useUser();
+  const { trigger, isMutating } = useSWRMutation(`/api/stores`, createStore, {
+    onSuccess(data) {
+      dispatch(setDialog(false));
+      router.push(`/${data.data.id}`)
+    },
+    onError(err) {
+      toast.error(`Something went wrong`);
+      console.log(`Error in onSubmit handler`, err);
+    },
+  });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof storeSchema>>({
+    resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post(`/api/stores`, {
-        name: values.name,
-        user,
-      });
-      dispatch(setDialog(false));
-      router.refresh();
-    } catch (error) {
-      console.log(`Error in onSubmit handler ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const onSubmit = async (values: TformFieldValues) =>  trigger({name: values.name, user,}) ;
 
   return (
     <Modal
@@ -77,7 +78,7 @@ export const StoreModal = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={loading}
+                      disabled={isMutating}
                       placeholder="E-Commerce"
                       {...field}
                     />
@@ -93,12 +94,12 @@ export const StoreModal = () => {
                             mt-5
                         "
             >
-              <Button className="flex gap-3" disabled={loading} type="submit">
+              <Button className="flex gap-3" disabled={isMutating} type="submit">
                 Continue
-                {loading && <Loader2 className="flex gap-3 animate-spin" />}
+                {isMutating && <Loader2 className="flex gap-3 animate-spin" />}
               </Button>
               <Button
-                disabled={loading}
+                disabled={isMutating}
                 onClick={() => dispatch(setDialog(false))}
                 variant="outline"
               >

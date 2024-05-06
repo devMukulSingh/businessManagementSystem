@@ -21,69 +21,68 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/AlertModal";
 import { useUser } from "@clerk/nextjs";
+import { settingsSchema } from "@/lib/formSchemas";
+import useSWRMutation from "swr/mutation";
 
 interface IsettingsFormProps {
   initialValues: Store | null;
 }
+type SettingFormValues = z.infer<typeof settingsSchema>;
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: "Store name is required",
-  }),
-});
-type SettingFormValues = z.infer<typeof formSchema>;
+async function updateStore(url: string, { arg }: { arg: SettingFormValues }) {
+  return await axios.patch(url, arg);
+}
+async function deleteStore(url: string) {
+  return await axios.delete(url);
+}
 
 const SettingsForm: React.FC<IsettingsFormProps> = ({ initialValues }) => {
-  const [openDeleteAlert, setOpenDeleteAlert] = useState<boolean>(false);
-  const params = useParams();
-  const router = useRouter();
-  const { storeId } = params;
-  const [loading, setLoading] = useState(false);
-
-  const form = useForm<SettingFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialValues || {},
-  });
-  const handleSubmit = async (data: SettingFormValues) => {
-    try {
-      setLoading(true);
-      const res = await axios.patch(`/api/stores/${storeId}`, data);
+  const { storeId } = useParams();
+  const {
+    trigger,
+    isMutating: isUpdating,
+    error: updateStoreError,
+  } = useSWRMutation(`/api/stores/${storeId}`, updateStore, {
+    onSuccess() {
       toast.success("Store updated");
       router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.log(`Error in handleSubmit ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handleDeleteStore = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.delete(`/api/stores/${storeId}`);
+    },
+  });
+  const {
+    isMutating: isDeleting,
+    trigger: triggerDelete,
+    error: deleteStoreError,
+  } = useSWRMutation(`/api/stores/${storeId}`, deleteStore, {
+    onSuccess() {
       toast.success("Store Deleted");
       router.refresh();
-    } catch (e: any) {
-      if (e.response.data.code === "P2014") {
+    },
+    onError(err) {
+      if (err.response.data.code === "P2014") {
         toast.error(
-          "Delete all Products,Billboards, and Categories associated with this store to continue",
+          "Delete all Products,Billboards, and Categories associated with this store to continue"
         );
       } else {
         toast.error("Something went wrong");
-        console.log(e.response.data);
+        console.log(err.response.data);
       }
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
+  const [openDeleteAlert, setOpenDeleteAlert] = useState<boolean>(false);
+  const router = useRouter();
+  const form = useForm<SettingFormValues>({
+    resolver: zodResolver(settingsSchema),
+    defaultValues: initialValues || {},
+  });
+  const handleSubmit = async (data: SettingFormValues) => trigger(data);
 
   return (
     <>
       <AlertModal
-        loading={loading}
+        loading={isDeleting}
         isOpen={openDeleteAlert}
         onClose={() => setOpenDeleteAlert(false)}
-        onConform={handleDeleteStore}
+        onConform={triggerDelete}
       />
       <main className="flex flex-col gap-6 px-10 py-2">
         <header className="flex justify-between ">
@@ -93,7 +92,7 @@ const SettingsForm: React.FC<IsettingsFormProps> = ({ initialValues }) => {
           </section>
           <Button
             onClick={() => setOpenDeleteAlert(true)}
-            disabled={loading}
+            disabled={isUpdating || isDeleting}
             variant="destructive"
             size="icon"
           >
@@ -112,6 +111,7 @@ const SettingsForm: React.FC<IsettingsFormProps> = ({ initialValues }) => {
                     <FormLabel>Store name</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isUpdating || isDeleting}
                         placeholder="store name"
                         {...field}
                         autoComplete="off"
@@ -124,7 +124,7 @@ const SettingsForm: React.FC<IsettingsFormProps> = ({ initialValues }) => {
               <Button
                 type="submit"
                 className="cursor-pointer w-32"
-                disabled={loading}
+                disabled={isUpdating || isDeleting}
               >
                 Save changes
               </Button>

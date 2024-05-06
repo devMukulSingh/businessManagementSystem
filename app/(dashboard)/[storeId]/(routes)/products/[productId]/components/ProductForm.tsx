@@ -25,7 +25,7 @@ export interface IinitialValues {
   price: number | undefined;
   quantity: number | undefined;
   colorId: string | undefined;
-  brandId:string | undefined
+  brandId: string | undefined;
 }
 interface IproductFormProps {
   initialValues: IinitialValues | null;
