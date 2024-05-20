@@ -41,7 +41,7 @@ export const StoreModal = () => {
   const { trigger, isMutating } = useSWRMutation(`/api/stores`, createStore, {
     onSuccess(data) {
       dispatch(setDialog(false));
-      router.push(`/${data.data.id}`)
+      router.push(`/${data.data.id}`);
     },
     onError(err) {
       toast.error(`Something went wrong`);
@@ -56,7 +56,8 @@ export const StoreModal = () => {
     },
   });
 
-  const onSubmit = async (values: TformFieldValues) =>  trigger({name: values.name, user,}) ;
+  const onSubmit = async (values: TformFieldValues) =>
+    trigger({ name: values.name, user });
 
   return (
     <Modal
@@ -94,7 +95,11 @@ export const StoreModal = () => {
                             mt-5
                         "
             >
-              <Button className="flex gap-3" disabled={isMutating} type="submit">
+              <Button
+                className="flex gap-3"
+                disabled={isMutating}
+                type="submit"
+              >
                 Continue
                 {isMutating && <Loader2 className="flex gap-3 animate-spin" />}
               </Button>

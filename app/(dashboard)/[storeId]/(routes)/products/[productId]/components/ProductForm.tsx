@@ -20,6 +20,7 @@ import Brands from "./formFields/Brands";
 import Colors from "./formFields/Colors";
 import Price from "./formFields/Price";
 import Quantity from "./formFields/Quantity";
+import useSWRMutation from "swr/mutation";
 export interface IinitialValues {
   name: string | undefined;
   price: number | undefined;
@@ -50,6 +51,16 @@ export interface Iform {
 }
 type productFormValues = z.infer<typeof productSchema>;
 
+async function createProduct(url:string,{arg}: {arg : productFormValues}){
+  return axios.post(url, arg);
+}
+async function updateProduct(url: string, { arg }: { arg: productFormValues }) {
+  return axios.patch(url, arg);
+}
+async function deleteProduct(url: string) {
+  return axios.delete(url);
+}
+
 const ProductForm: React.FC<IproductFormProps> = ({
   initialValues,
   colors,
@@ -59,8 +70,6 @@ const ProductForm: React.FC<IproductFormProps> = ({
   const params = useParams();
   const router = useRouter();
   const { storeId, productId } = params;
-  const [loading, setLoading] = useState(false);
-
   const form = useForm<productFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: initialValues
@@ -75,49 +84,67 @@ const ProductForm: React.FC<IproductFormProps> = ({
           brandId: "",
         },
   });
-  const onSubmit = async (data: productFormValues) => {
-    try {
-      setLoading(true);
-      if (initialValues) {
-        await axios.patch(`/api/${storeId}/product/${productId}`, data);
+  const { trigger:createTrigger,isMutating:isMutatingCreate } = useSWRMutation(`/api/${storeId}/product`,createProduct,{
+    onSuccess(){
         toast.success("product updated");
         router.push(`/${storeId}/products`);
-      } else {
-        await axios.post(`/api/${storeId}/product`, data);
-        toast.success("product created");
-        router.push(`/${storeId}/products`);
-      }
       router.refresh();
-    } catch (error) {
+
+    },
+    onError(e){
       toast.error("Something went wrong");
-      console.log(`Error in onSubmit ${error}`);
-    } finally {
-      setLoading(false);
+      console.log(`Error in createProduct`,e);
     }
-  };
-  const handleProductDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${storeId}/product/${productId}`);
+  });
+    const { trigger:updateTrigger, isMutating:isMutatingUpdate } = useSWRMutation(
+      `/api/${storeId}/product/${productId}`,
+      updateProduct,
+      {
+        onSuccess() {
+          toast.success("product updated");
+          router.push(`/${storeId}/products`);
+          router.refresh();
+
+        },
+        onError(e) {
+          toast.error("Something went wrong");
+          console.log(`Error in updateProduct`, e);
+        },
+      }
+    );
+    const { trigger:deleteTrigger, isMutating:isMutatingDelete } = useSWRMutation(
+      `/api/${storeId}/product/${productId}`,
+      deleteProduct,
+      {
+        onSuccess() {
+          toast.success("product updated");
       setOpenDeleteAlert(false);
       toast.success("Product deleted");
       router.push(`/${storeId}/products`);
-    } catch (e) {
-      toast.error("Something went wrong");
-      console.log(`Error in handleProductDelete ${e}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+        },
+        onError(e) {
+          toast.error("Something went wrong");
+          console.log(`Error in updateProduct`, e);
+        },
+      }
+    );
+  const onSubmit = async (data: productFormValues) => {
+      if (initialValues) {
+        await updateTrigger(data)
+      } else {
+        await createTrigger(data);
+      }
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
     <>
       <AlertModal
-        loading={loading}
+        loading={isMutatingDelete}
         isOpen={openDeleteAlert}
         onClose={() => setOpenDeleteAlert(false)}
-        onConform={handleProductDelete}
+        onConform={deleteTrigger}
       />
       <div className="flex flex-col gap-6 px-10 py-2">
         <header className="flex justify-between ">
@@ -130,7 +157,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
           <Button
             className={`${!initialValues ? "hidden" : ""}`}
             onClick={() => setOpenDeleteAlert(true)}
-            disabled={loading}
+            disabled={isMutatingDelete}
             variant="destructive"
             size="icon"
           >
@@ -151,10 +178,10 @@ const ProductForm: React.FC<IproductFormProps> = ({
             <Button
               type="submit"
               className="w-32 cursor-pointer mt-5 flex gap-2"
-              disabled={loading}
+              disabled={isMutatingCreate || isMutatingUpdate}
             >
               {initialValues ? "Save Changes" : "Create"}
-              {loading && <Loader />}
+              {isMutatingCreate || isMutatingUpdate && <Loader />}
             </Button>
           </form>
         </Form>

@@ -18,6 +18,7 @@ import ColorName from "./ColorName";
 const ColorValue = dynamic(() => import("./ColorValue"));
 import { colorSchema } from "@/lib/formSchemas";
 import dynamic from "next/dynamic";
+import useSWRMutation from "swr/mutation";
 
 interface IcolorFormProps {
   initialValues: Color | null;
@@ -33,15 +34,20 @@ export interface Iform {
   >;
   loading?: boolean;
 }
-
 type colorFormValues = z.infer<typeof colorSchema>;
-
+async function createColor(url: string, { arg }: { arg: colorFormValues }) {
+  return await axios.post(url, arg);
+}
+async function updateColor(url: string, { arg }: { arg: colorFormValues }) {
+  return await axios.patch(url, arg);
+}
+async function deleteColor(url: string) {
+  return await axios.delete(url);
+}
 const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
   const [openDeleteAlert, setOpenDeleteAlert] = useState<boolean>(false);
-  const params = useParams();
+  const { storeId, colorId } = useParams();
   const router = useRouter();
-  const { storeId, colorId } = params;
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<colorFormValues>({
     resolver: zodResolver(colorSchema),
@@ -50,47 +56,56 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
       value: "",
     },
   });
+   const { trigger: createTrigger, isMutating: isMutatingCreate } =
+     useSWRMutation(`/api/${storeId}/color`, createColor, {
+       onSuccess() {
+         toast.success("color created");
+         router.push(`/${storeId}/colors`);
+         router.refresh();
+       },
+       onError(err) {
+         console.log(`Error in createColor`, err);
+       },
+     });
+   const { trigger: updateTrigger, isMutating: isMutatingUpdate } =
+     useSWRMutation(`/api/${storeId}/color/${colorId}`, updateColor, {
+       onSuccess() {
+         toast.success("color updated");
+         router.push(`/${storeId}/colors`);
+         router.refresh();
+       },
+       onError(err) {
+         console.log(`Error in updatecolor`, err);
+         toast.error("Something went wrong");
+       },
+     });
+   const { trigger: deleteTrigger, isMutating: isMutatingDelete } =
+     useSWRMutation(`/api/${storeId}/color/${colorId}`, deleteColor, {
+       onSuccess() {
+         toast.success("color deleted");
+         setOpenDeleteAlert(false);
+         router.push(`/${storeId}/colors`);
+         router.refresh();
+       },
+       onError(err) {
+         console.log(`Error in deletecolor`, err);
+         toast.error("Something went wrong");
+       },
+     });
   const onSubmit = async (data: colorFormValues) => {
-    try {
-      setLoading(true);
       if (initialValues) {
-        const res = await axios.patch(`/api/${storeId}/color/${colorId}`, data);
-        toast.success("color updated");
+        updateTrigger(data)
       } else {
-        const res = await axios.post(`/api/${storeId}/color`, data);
-        toast.success("color created");
-        router.push(`/${storeId}/colors`);
+        createTrigger(data)
       }
-      router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.log(`Error in onSubmit ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handleColorDelete = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.delete(`/api/${storeId}/color/${colorId}`);
-      if (res.status === 200) toast.success("Color deleted");
-      else if (res.status === 500) toast.error("Something went wrong");
-      setOpenDeleteAlert(false);
-      router.push(`/${storeId}/colors`);
-    } catch (e) {
-      toast.error("Something went wrong");
-      console.log(`Error in handleColorDelete ${e}`);
-    } finally {
-      setLoading(false);
-    }
   };
   return (
     <>
       <AlertModal
-        loading={loading}
+        loading={isMutatingDelete}
         isOpen={openDeleteAlert}
         onClose={() => setOpenDeleteAlert(false)}
-        onConform={handleColorDelete}
+        onConform={deleteTrigger}
       />
       <div className="flex flex-col gap-6 px-10 py-2">
         <header className="flex justify-between ">
@@ -103,7 +118,7 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
           <Button
             className={`${!initialValues ? "hidden" : ""}`}
             onClick={() => setOpenDeleteAlert(true)}
-            disabled={loading}
+            disabled={isMutatingDelete}
             variant="destructive"
             size="icon"
           >
@@ -115,15 +130,21 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex gap-4 flex-col">
-              <ColorName form={form} loading={loading} />
-              <ColorValue form={form} loading={loading} />
+              <ColorName
+                form={form}
+                loading={isMutatingCreate || isMutatingUpdate}
+              />
+              <ColorValue
+                form={form}
+                loading={isMutatingCreate || isMutatingUpdate}
+              />
               <Button
                 type="submit"
                 className="w-32 cursor-pointer flex gap-2"
-                disabled={loading}
+                disabled={isMutatingCreate || isMutatingUpdate}
               >
                 {initialValues ? "Save Changes" : "Create"}
-                {loading && <Loader />}
+                {isMutatingCreate || (isMutatingUpdate && <Loader />)}
               </Button>
             </div>
           </form>

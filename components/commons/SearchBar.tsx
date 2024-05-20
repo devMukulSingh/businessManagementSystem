@@ -16,7 +16,7 @@ export function SearchBar({ tableData, setTableData }: SearchBarProps) {
       const filterdData = tableData.filter(
         (item: any) =>
           item?.name.toLowerCase().includes(query) ||
-          item?.customerName.toLowerCase().includes(query),
+          item?.customerName?.toLowerCase()?.includes(query),
       );
       setTableData(filterdData);
     } else setTableData(tableData);

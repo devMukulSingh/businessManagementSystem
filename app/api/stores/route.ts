@@ -20,21 +20,21 @@ export async function POST(req: Request) {
         name,
       },
     });
-    
+
     const isUserExists = await prisma.user.findUnique({
-      where:{
-        id:user.id
-      }
-    })
-    
-    if(!isUserExists)
-    await prisma.user.create({
-      data: {
+      where: {
         id: user.id,
-        name: user.fullName,
-        email: user.primaryEmailAddress.emailAddress,
       },
     });
+
+    if (!isUserExists)
+      await prisma.user.create({
+        data: {
+          id: user.id,
+          name: user.fullName,
+          email: user.primaryEmailAddress.emailAddress,
+        },
+      });
 
     return NextResponse.json(store, { status: 200 });
   } catch (error) {

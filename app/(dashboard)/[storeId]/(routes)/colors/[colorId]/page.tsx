@@ -13,9 +13,9 @@ const SingleColorPage = async ({ params }: { params: { colorId: string } }) => {
       },
     });
   return (
-    <main>
+    <>
       <ColorForm initialValues={colors} />
-    </main>
+    </>
   );
 };
 
