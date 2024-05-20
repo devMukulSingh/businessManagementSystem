@@ -88,11 +88,11 @@ const BrandForm: React.FC<IclientFormProps> = ({ initialValues }) => {
     },
   });
   const onSubmit = async (data: ClientFormValues) => {
-      if (initialValues) {
-        updateTrigger(data);
-      } else {
-        createTrigger(data);
-      }
+    if (initialValues) {
+      updateTrigger(data);
+    } else {
+      createTrigger(data);
+    }
   };
   return (
     <>

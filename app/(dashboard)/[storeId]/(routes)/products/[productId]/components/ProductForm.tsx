@@ -51,7 +51,7 @@ export interface Iform {
 }
 type productFormValues = z.infer<typeof productSchema>;
 
-async function createProduct(url:string,{arg}: {arg : productFormValues}){
+async function createProduct(url: string, { arg }: { arg: productFormValues }) {
   return axios.post(url, arg);
 }
 async function updateProduct(url: string, { arg }: { arg: productFormValues }) {
@@ -84,58 +84,50 @@ const ProductForm: React.FC<IproductFormProps> = ({
           brandId: "",
         },
   });
-  const { trigger:createTrigger,isMutating:isMutatingCreate } = useSWRMutation(`/api/${storeId}/product`,createProduct,{
-    onSuccess(){
+  const { trigger: createTrigger, isMutating: isMutatingCreate } =
+    useSWRMutation(`/api/${storeId}/product`, createProduct, {
+      onSuccess() {
+        toast.success("product created");
+        router.push(`/${storeId}/products`);
+        router.refresh();
+      },
+      onError(e) {
+        toast.error("Something went wrong");
+        console.log(`Error in createProduct`, e);
+      },
+    });
+  const { trigger: updateTrigger, isMutating: isMutatingUpdate } =
+    useSWRMutation(`/api/${storeId}/product/${productId}`, updateProduct, {
+      onSuccess() {
         toast.success("product updated");
         router.push(`/${storeId}/products`);
-      router.refresh();
-
-    },
-    onError(e){
-      toast.error("Something went wrong");
-      console.log(`Error in createProduct`,e);
-    }
-  });
-    const { trigger:updateTrigger, isMutating:isMutatingUpdate } = useSWRMutation(
-      `/api/${storeId}/product/${productId}`,
-      updateProduct,
-      {
-        onSuccess() {
-          toast.success("product updated");
-          router.push(`/${storeId}/products`);
-          router.refresh();
-
-        },
-        onError(e) {
-          toast.error("Something went wrong");
-          console.log(`Error in updateProduct`, e);
-        },
-      }
-    );
-    const { trigger:deleteTrigger, isMutating:isMutatingDelete } = useSWRMutation(
-      `/api/${storeId}/product/${productId}`,
-      deleteProduct,
-      {
-        onSuccess() {
-          toast.success("product updated");
-      setOpenDeleteAlert(false);
-      toast.success("Product deleted");
-      router.push(`/${storeId}/products`);
-
-        },
-        onError(e) {
-          toast.error("Something went wrong");
-          console.log(`Error in updateProduct`, e);
-        },
-      }
-    );
+        router.refresh();
+      },
+      onError(e) {
+        toast.error("Something went wrong");
+        console.log(`Error in updateProduct`, e);
+      },
+    });
+  const { trigger: deleteTrigger, isMutating: isMutatingDelete } =
+    useSWRMutation(`/api/${storeId}/product/${productId}`, deleteProduct, {
+      onSuccess() {
+        setOpenDeleteAlert(false);
+        toast.success("Product deleted");
+        router.push(`/${storeId}/products`);
+        router.refresh();
+      },
+      onError(e) {
+        toast.error("Something went wrong");
+        console.log(`Error in updateProduct`, e);
+      },
+    });
   const onSubmit = async (data: productFormValues) => {
-      if (initialValues) {
-        await updateTrigger(data)
-      } else {
-        await createTrigger(data);
-      }
-  }
+    if (initialValues) {
+      await updateTrigger(data);
+    } else {
+      await createTrigger(data);
+    }
+  };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
@@ -181,7 +173,7 @@ const ProductForm: React.FC<IproductFormProps> = ({
               disabled={isMutatingCreate || isMutatingUpdate}
             >
               {initialValues ? "Save Changes" : "Create"}
-              {isMutatingCreate || isMutatingUpdate && <Loader />}
+              {isMutatingCreate || (isMutatingUpdate && <Loader />)}
             </Button>
           </form>
         </Form>

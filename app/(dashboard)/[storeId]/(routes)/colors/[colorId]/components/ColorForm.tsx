@@ -56,48 +56,48 @@ const ColorForm: React.FC<IcolorFormProps> = ({ initialValues }) => {
       value: "",
     },
   });
-   const { trigger: createTrigger, isMutating: isMutatingCreate } =
-     useSWRMutation(`/api/${storeId}/color`, createColor, {
-       onSuccess() {
-         toast.success("color created");
-         router.push(`/${storeId}/colors`);
-         router.refresh();
-       },
-       onError(err) {
-         console.log(`Error in createColor`, err);
-       },
-     });
-   const { trigger: updateTrigger, isMutating: isMutatingUpdate } =
-     useSWRMutation(`/api/${storeId}/color/${colorId}`, updateColor, {
-       onSuccess() {
-         toast.success("color updated");
-         router.push(`/${storeId}/colors`);
-         router.refresh();
-       },
-       onError(err) {
-         console.log(`Error in updatecolor`, err);
-         toast.error("Something went wrong");
-       },
-     });
-   const { trigger: deleteTrigger, isMutating: isMutatingDelete } =
-     useSWRMutation(`/api/${storeId}/color/${colorId}`, deleteColor, {
-       onSuccess() {
-         toast.success("color deleted");
-         setOpenDeleteAlert(false);
-         router.push(`/${storeId}/colors`);
-         router.refresh();
-       },
-       onError(err) {
-         console.log(`Error in deletecolor`, err);
-         toast.error("Something went wrong");
-       },
-     });
+  const { trigger: createTrigger, isMutating: isMutatingCreate } =
+    useSWRMutation(`/api/${storeId}/color`, createColor, {
+      onSuccess() {
+        toast.success("color created");
+        router.push(`/${storeId}/colors`);
+        router.refresh();
+      },
+      onError(err) {
+        console.log(`Error in createColor`, err);
+      },
+    });
+  const { trigger: updateTrigger, isMutating: isMutatingUpdate } =
+    useSWRMutation(`/api/${storeId}/color/${colorId}`, updateColor, {
+      onSuccess() {
+        toast.success("color updated");
+        router.push(`/${storeId}/colors`);
+        router.refresh();
+      },
+      onError(err) {
+        console.log(`Error in updatecolor`, err);
+        toast.error("Something went wrong");
+      },
+    });
+  const { trigger: deleteTrigger, isMutating: isMutatingDelete } =
+    useSWRMutation(`/api/${storeId}/color/${colorId}`, deleteColor, {
+      onSuccess() {
+        toast.success("color deleted");
+        setOpenDeleteAlert(false);
+        router.push(`/${storeId}/colors`);
+        router.refresh();
+      },
+      onError(err) {
+        console.log(`Error in deletecolor`, err);
+        toast.error("Something went wrong");
+      },
+    });
   const onSubmit = async (data: colorFormValues) => {
-      if (initialValues) {
-        updateTrigger(data)
-      } else {
-        createTrigger(data)
-      }
+    if (initialValues) {
+      updateTrigger(data);
+    } else {
+      createTrigger(data);
+    }
   };
   return (
     <>
