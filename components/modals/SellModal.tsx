@@ -79,12 +79,12 @@ const SellModal: FC<IsellModalProps> = ({
     sellProduct,
   );
   const onSubmit = async (data: schema) => {
+    onClose();
     await trigger({
       ...data,
       productId: product.id,
       storeId: storeId.toString(),
     });
-    onClose();
     toast.success("Product Sold");
     router.refresh();
   };
