@@ -14,14 +14,14 @@ import CardSkeleton from "./CardSkeleton";
 import dynamic from "next/dynamic";
 
 const TotalRevenue = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue")
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue"),
 );
 const Sales = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales")
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales"),
 );
 const ProductInStock = lazy(() => import("./ProductInStock"));
 
-interface IExtendedOrder extends Order  {
+interface IExtendedOrder extends Order {
   product: Product;
 }
 
@@ -34,7 +34,6 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
 
   const { data: orders, isLoading } = useSWR(`/api/${storeId}/order`, fetcher, {
     revalidateOnFocus: false,
-    revalidateIfStale: false,
     onError(err) {
       console.log(`Error in getOrders`, err);
     },
@@ -42,8 +41,8 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       const filteredOrderItems =
         data
           ?.filter(
-            (order) =>  
-              new Date(order.createdAt).getMonth() === Number(currentMonth)
+            (order) =>
+              new Date(order.createdAt).getMonth() === Number(currentMonth),
           )
           .flat() || [];
       setSelectedMonthOrders(filteredOrderItems?.length);
@@ -52,8 +51,8 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       if (filteredOrderItems.length > 0) {
         const filteredRevenue =
           filteredOrderItems
-            .map( (order) => order.product.price )
-            
+            .map((order) => order.product.price)
+
             .reduce((acc: number, curr: number) => acc + curr, 0) || 0;
         setSelectedMonthRevenue(filteredRevenue);
         console.log(filteredRevenue, "filteredRevenue");
@@ -66,13 +65,12 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
 
   const handleMonthChange = (selectedMonth: string) => {
     console.log(selectedMonth);
-    
-    const filteredOrderItems = orders
-      ?.filter(
-        (order: Order) =>
-          new Date(order.createdAt).getMonth() === Number(selectedMonth)
-      )
-      // .flat();
+
+    const filteredOrderItems = orders?.filter(
+      (order: Order) =>
+        new Date(order.createdAt).getMonth() === Number(selectedMonth),
+    );
+    // .flat();
     setSelectedMonthOrders(filteredOrderItems?.length);
     console.log(filteredOrderItems, "filteredOrderItems");
 

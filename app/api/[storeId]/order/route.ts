@@ -18,9 +18,9 @@ export async function GET(
       where: {
         storeId,
       },
-      include:{
-        product:true
-      }
+      include: {
+        product: true,
+      },
     });
 
     return NextResponse.json(orders, { status: 200 });

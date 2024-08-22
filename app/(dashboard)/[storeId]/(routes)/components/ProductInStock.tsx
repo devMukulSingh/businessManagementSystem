@@ -16,7 +16,7 @@ const ProductInStock: FC<ProductInStockProps> = async ({ storeId }) => {
       onError(e) {
         console.log(`Error in getProductsInstock`, e);
       },
-    }
+    },
   );
 
   return (
