@@ -17,6 +17,9 @@ const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
       color: true,
       brand: true,
     },
+    orderBy:{
+      createdAt:'desc'
+    }
   });
 
   const formattedProducts = products.map((item) => ({
