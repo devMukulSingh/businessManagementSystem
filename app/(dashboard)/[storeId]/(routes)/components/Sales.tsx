@@ -3,10 +3,10 @@ import { CreditCard, DollarSign } from "lucide-react";
 import { FC } from "react";
 
 interface SalesProps {
-  currMonthOrders: number;
+  selectedMonthOrders: number;
 }
 
-const Sales: FC<SalesProps> = ({ currMonthOrders }) => {
+const Sales: FC<SalesProps> = ({ selectedMonthOrders = 0 }) => {
   return (
     <>
       <Card>
@@ -15,7 +15,7 @@ const Sales: FC<SalesProps> = ({ currMonthOrders }) => {
           <CreditCard className="ml-auto" />
         </CardHeader>
         <CardContent className="mt-auto text-2xl font-semibold">
-          +{currMonthOrders}
+          +{selectedMonthOrders}
         </CardContent>
       </Card>
     </>
