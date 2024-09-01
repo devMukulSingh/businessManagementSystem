@@ -36,7 +36,7 @@ export const getGraphRevenue = async (storeId: string) => {
       { name: "Dec", total: 0 },
     ];
 
-    let i = 1;
+    let i = 0;
     if (totalOrders.length > 0) {
       for (let obj of graphData) {
         let totalMonthlyRevenue = 0;
