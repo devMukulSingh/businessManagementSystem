@@ -9,7 +9,7 @@ interface ChartProps {
 const Chart: FC<ChartProps> = ({ graphData }) => {
   return (
     <>
-      <div>
+      <div className="border p-2 rounded-md">
         <ResponsiveContainer width="100%" height={350}>
           <BarChart data={graphData}>
             <XAxis

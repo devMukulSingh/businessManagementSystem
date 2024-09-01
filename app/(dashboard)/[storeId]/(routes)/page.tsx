@@ -18,10 +18,9 @@ const DashboardPage = async ({ params }: { params: { storeId: string } }) => {
   const { storeId } = params;
 
   return (
-    <div className="p-5 lg:p-15 md:p-10 space-y-10">
+    <div className="px-5 py-3 space-y-5">
       <header>
         <h1 className="text-3xl font-bold">Dasboard</h1>
-        <h1>Manage Dashboard</h1>
       </header>
 
       <DashboardData storeId={storeId} />

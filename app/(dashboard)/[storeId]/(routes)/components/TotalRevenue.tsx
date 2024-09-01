@@ -9,7 +9,7 @@ interface TotalRevenueProps {
 const TotalRevenue: FC<TotalRevenueProps> = ({ selectedMonthRevenue = 0 }) => {
   return (
     <>
-      <Card>
+      <Card className="">
         <CardHeader className="flex flex-row gap-3 items-center">
           <h1>Total Revenue</h1>
           <DollarSign className="ml-auto" />

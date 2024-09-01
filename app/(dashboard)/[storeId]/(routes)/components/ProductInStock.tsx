@@ -21,7 +21,7 @@ const ProductInStock: FC<ProductInStockProps> = async ({ storeId }) => {
 
   return (
     <>
-      <Card>
+      <Card className="">
         <CardHeader className="flex flex-row gap-3 items-center">
           Products in Stock
           <ShoppingBasket className="ml-auto" />

@@ -9,8 +9,8 @@ interface SalesProps {
 const Sales: FC<SalesProps> = ({ selectedMonthOrders = 0 }) => {
   return (
     <>
-      <Card>
-        <CardHeader className="flex flex-row gap-3 items-center">
+      <Card className=" ">
+        <CardHeader className="flex flex-row gap-2 items-center">
           Sales
           <CreditCard className="ml-auto" />
         </CardHeader>
