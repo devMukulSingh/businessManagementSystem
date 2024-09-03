@@ -26,10 +26,12 @@ export const columns: ColumnDef<OrdersColumn>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({ row }) => <>₹{row.original.price}</>,
   },
   {
     accessorKey: "dueAmount",
     header: "Due amount",
+    cell: ({ row }) => <>₹{row.original.dueAmount}</>,
   },
   {
     accessorKey: "isPaymentDue",

@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useAppSelector } from "@/store/hooks";
 import { DollarSign } from "lucide-react";
 import { FC } from "react";
 
 interface TotalRevenueProps {
-  selectedMonthRevenue: number;
 }
 
-const TotalRevenue: FC<TotalRevenueProps> = ({ selectedMonthRevenue = 0 }) => {
+const TotalRevenue: FC<TotalRevenueProps> = ({ }) => {
+  const { selectedDateRevenue } = useAppSelector( state => state.adminSlice);
   return (
     <>
       <Card className="">
@@ -15,7 +16,7 @@ const TotalRevenue: FC<TotalRevenueProps> = ({ selectedMonthRevenue = 0 }) => {
           <DollarSign className="ml-auto" />
         </CardHeader>
         <CardContent className="mt-auto text-2xl font-semibold">
-          ₹{selectedMonthRevenue}
+          ₹{selectedDateRevenue}
         </CardContent>
       </Card>
     </>

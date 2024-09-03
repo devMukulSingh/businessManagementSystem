@@ -33,6 +33,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({row}) => <>₹{row.original.price}</>
   },
   {
     accessorKey: "color.name",
