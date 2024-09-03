@@ -44,13 +44,15 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
         },
       },
     });
-
+    const orderPrice = quantity * updatedProduct.price;
     await prisma.order.create({
       data: {
         dueAmount,
         customerName,
+        orderPrice,
         productId: updatedProduct.id,
         storeId,
+        quantity,
       },
     });
 

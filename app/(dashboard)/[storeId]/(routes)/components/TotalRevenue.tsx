@@ -3,11 +3,10 @@ import { useAppSelector } from "@/store/hooks";
 import { DollarSign } from "lucide-react";
 import { FC } from "react";
 
-interface TotalRevenueProps {
-}
+interface TotalRevenueProps {}
 
-const TotalRevenue: FC<TotalRevenueProps> = ({ }) => {
-  const { selectedDateRevenue } = useAppSelector( state => state.adminSlice);
+const TotalRevenue: FC<TotalRevenueProps> = ({}) => {
+  const { selectedDateRevenue } = useAppSelector((state) => state.adminSlice);
   return (
     <>
       <Card className="">

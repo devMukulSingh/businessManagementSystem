@@ -19,10 +19,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { setSelectedDateOrders, setSelectedDateRevenue } from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
 const TotalRevenue = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue"),
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue")
 );
 const Sales = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales"),
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales")
 );
 const ProductInStock = lazy(() => import("./ProductInStock"));
 
@@ -36,75 +36,92 @@ interface DashboardDataProps {
 
 const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
   const dispatch = useAppDispatch();
-   const currentMonth = new Date().getMonth();
-   const currentYear = new Date().getFullYear();
- const [selectedDateRange, setSelectedDateRange] = useState<
-   DateRange | undefined
- >({
-   from: new Date(currentYear, currentMonth, 1),
-   to: addDays(new Date(currentYear, currentMonth, 30), 0),
- });
-  const { data: orders, isLoading } = useSWR<IExtendedOrder[]>(`/api/${storeId}/order`, fetcher, {
-    revalidateOnFocus: false,
-    onError(err) {
-      console.log(`Error in getOrders`, err);
-    },
-  } )
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const [selectedDateRange, setSelectedDateRange] = useState<
+    DateRange | undefined
+  >({
+    from: new Date(currentYear, currentMonth, 1),
+    to: addDays(new Date(currentYear, currentMonth, 30), 0),
+  });
+  const { data: orders, isLoading } = useSWR<IExtendedOrder[]>(
+    `/api/${storeId}/order`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      onError(err) {
+        console.log(`Error in getOrders`, err);
+      },
+    }
+  );
 
-   const handleMonthChange = (date: DateRange | undefined) => {
-     setSelectedDateRange(date);
-     let selectedDateOrders:IExtendedOrder[] = [];
-     const from = date?.from?.setHours(0, 0, 0, 0) || Date.now();
-     const to = date?.to?.setHours(0, 0, 0, 0) || Date.now();
-     if (date && date?.from && date?.to) {
-       selectedDateOrders =
-         orders?.filter((order) => {
-           const createdAt = new Date(order.createdAt).setHours(0, 0, 0, 0);
-           if (createdAt >= from && createdAt <= to) {
-             return order;
-           }
-         }) || [];
-     } else if (!date?.from || !date?.to) {
-       selectedDateOrders =
-         orders?.filter((order) => {
-           const createdAt = new Date(order.createdAt).setHours(0, 0, 0, 0);
-           if (createdAt === from || createdAt === to) {
-             return order;
-           }
-         }) || [];
-     }
-     console.log(selectedDateOrders, "selectedDateOrders");
-     
-     dispatch(setSelectedDateOrders(selectedDateOrders.length));
+  const handleMonthChange = (date: DateRange | undefined) => {
+    setSelectedDateRange(date);
+    let selectedDateOrders: IExtendedOrder[] = [];
+    const from = date?.from?.setHours(0, 0, 0, 0) || Date.now();
+    const to = date?.to?.setHours(0, 0, 0, 0) || Date.now();
+    if (date && date?.from && date?.to) {
+      selectedDateOrders =
+        orders?.filter((order) => {
+          const createdAt = new Date(order.createdAt).setHours(0, 0, 0, 0);
+          if (createdAt >= from && createdAt <= to) {
+            return order;
+          }
+        }) || [];
+    } else if (!date?.from || !date?.to) {
+      selectedDateOrders =
+        orders?.filter((order) => {
+          const createdAt = new Date(order.createdAt).setHours(0, 0, 0, 0);
+          if (createdAt === from || createdAt === to) {
+            return order;
+          }
+        }) || [];
+    }
+    const selectedDateSales = selectedDateOrders.reduce((acc, next) => {
+      if (next.quantity) return acc + next.quantity;
+      return 0;
+    }, 0);
 
-     if (selectedDateOrders.length > 0) {
-       const filteredRevenue =
-         selectedDateOrders
-           .map((order) => order.product.price)
-           .flat()
-           .reduce((acc: number, curr: number) => acc + curr, 0) || 0;
-           console.log(filteredRevenue, "filteredRevenue");
-           
-       dispatch(setSelectedDateRevenue(filteredRevenue));
-     } else dispatch(setSelectedDateRevenue(0));
-   };
-useEffect(() => {
-  //setting currentmonth transactions in state
-  const currMonthOrders =
-    (orders)?.filter(
-      (order) => new Date(order.createdAt).getMonth() === Number(currentMonth)
-    ) || [];
-  dispatch(setSelectedDateOrders(currMonthOrders?.length));
+    dispatch(setSelectedDateOrders(selectedDateSales));
 
-  //setting selected month revenue in state
-  if (currMonthOrders.length > 0) {
-    const filteredRevenue =
-      currMonthOrders
-        .map((tran) => tran.product.price)
-        .reduce((acc: number, curr: number) => acc + curr, 0) || 0;
-    dispatch(setSelectedDateRevenue(filteredRevenue));
-  }
-}, [orders]);
+    if (selectedDateOrders.length > 0) {
+      const filteredRevenue =
+        selectedDateOrders.reduce((acc, curr) => {
+          if (curr.orderPrice) return acc + curr.orderPrice;
+          else return 0;
+        }, 0) || 0;
+
+      dispatch(setSelectedDateRevenue(filteredRevenue));
+    } else dispatch(setSelectedDateRevenue(0));
+  };
+
+  useEffect(() => {
+    //setting currentmonth transactions in state
+    console.log(orders);
+
+    const currMonthOrders =
+      orders?.filter(
+        (order) => new Date(order.createdAt).getMonth() === Number(currentMonth)
+      ) || [];
+    console.log(currMonthOrders, "currMonthOrders");
+
+    const selectedDateSales = currMonthOrders.reduce((acc, next) => {
+      if (next.quantity) return acc + next.quantity;
+      else return 0;
+    }, 0);
+    console.log(selectedDateSales, "selectedDateSales");
+
+    dispatch(setSelectedDateOrders(selectedDateSales));
+
+    //setting selected month revenue in state
+    if (currMonthOrders.length > 0) {
+      const filteredRevenue = currMonthOrders.reduce((acc, curr) => {
+        if (curr.orderPrice) return acc + curr.orderPrice;
+        else return 0;
+      }, 0);
+      dispatch(setSelectedDateRevenue(filteredRevenue));
+    }
+  }, [orders]);
   return (
     <div className="flex flex-col gap-5">
       <Popover>
@@ -145,7 +162,7 @@ useEffect(() => {
       </Popover>
       <section className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 gap-3">
         <Suspense fallback={<CardSkeleton />}>
-          <TotalRevenue/>
+          <TotalRevenue />
         </Suspense>
         <Suspense fallback={<CardSkeleton />}>
           <Sales />

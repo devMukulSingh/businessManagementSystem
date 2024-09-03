@@ -12,6 +12,7 @@ export type OrdersColumn = {
   dueAmount: number;
   isPaymentDue: string;
   customerName: string | null;
+  orderPrice : number | null;
 };
 
 export const columns: ColumnDef<OrdersColumn>[] = [
@@ -27,6 +28,11 @@ export const columns: ColumnDef<OrdersColumn>[] = [
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => <>₹{row.original.price}</>,
+  },
+  {
+    accessorKey: "orderPrice",
+    header: "Total",
+    cell: ({ row }) => <>₹{row.original.orderPrice}</>,
   },
   {
     accessorKey: "dueAmount",

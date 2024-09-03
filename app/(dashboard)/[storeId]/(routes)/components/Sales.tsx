@@ -3,10 +3,9 @@ import { useAppSelector } from "@/store/hooks";
 import { CreditCard, DollarSign } from "lucide-react";
 import { FC } from "react";
 
-interface SalesProps {
-}
+interface SalesProps {}
 
-const Sales: FC<SalesProps> = ({ }) => {
+const Sales: FC<SalesProps> = ({}) => {
   const { selectedDateOrders } = useAppSelector((state) => state.adminSlice);
 
   return (

@@ -4,15 +4,15 @@ interface IinitialState {
   isOpen: boolean;
   loading: boolean;
   openSidebar: boolean;
-  selectedDateOrders:number;
-  selectedDateRevenue: number
+  selectedDateOrders: number;
+  selectedDateRevenue: number;
 }
 const initialState: IinitialState = {
   isOpen: false,
   loading: false,
   openSidebar: false,
-  selectedDateOrders : 0,
-  selectedDateRevenue:0
+  selectedDateOrders: 0,
+  selectedDateRevenue: 0,
 };
 
 export const adminSlice = createSlice({
@@ -28,14 +28,20 @@ export const adminSlice = createSlice({
     setOpenSidebar: (state) => {
       state.openSidebar = !state.openSidebar;
     },
-    setSelectedDateOrders : (state,action) => {
+    setSelectedDateOrders: (state, action) => {
       state.selectedDateOrders = action.payload;
     },
-    setSelectedDateRevenue : (state,action) => {
+    setSelectedDateRevenue: (state, action) => {
       state.selectedDateRevenue = action.payload;
-    }
+    },
   },
 });
 
 export default adminSlice.reducer;
-export const { setDialog, setLoading, setOpenSidebar,setSelectedDateOrders,setSelectedDateRevenue } = adminSlice.actions;
+export const {
+  setDialog,
+  setLoading,
+  setOpenSidebar,
+  setSelectedDateOrders,
+  setSelectedDateRevenue,
+} = adminSlice.actions;

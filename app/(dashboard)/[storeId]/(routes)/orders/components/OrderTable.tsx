@@ -5,14 +5,6 @@ import { columns } from "@/components/ui/Order/OrdersColumn";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 
-// interface IorderItem extends OrderItem {
-//   product: {
-//     name: string;
-//     price: number;
-//     isFeatured: Boolean;
-//     isArchived: Boolean;
-//   };
-// }
 
 const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
   const orders = await prisma.order.findMany({
@@ -31,6 +23,7 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
     id: item.product.id,
     name: item.product.name,
     price: item.product.price,
+    orderPrice:item.orderPrice,
     createdAt: format(item.createdAt, "dd/MMM/yyyy kk:mm:ss"),
     dueAmount: item.dueAmount,
     isPaymentDue: item.dueAmount === 0 ? "No" : "Yes",
