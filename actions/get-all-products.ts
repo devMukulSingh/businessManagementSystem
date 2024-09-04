@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { cache } from "react";
 
-export const getAllProducts = async (storeId: string) => {
+export const getAllProducts = cache(async (storeId: string) => {
   const products = await prisma.product.findMany({
     where: {
       storeId,
@@ -10,7 +11,7 @@ export const getAllProducts = async (storeId: string) => {
     (prev, curr) => prev + curr.quantityAvailable,
     0,
   );
-  console.log(totalProducts);
-
+  console.log("products");
+  
   return totalProducts;
-};
+});

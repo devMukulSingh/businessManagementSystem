@@ -1,26 +1,13 @@
 import React, { FC } from "react";
 import Header from "./Header";
 import { DataTable } from "@/components/commons/DataTable";
-import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import { ProductClientCompProps } from "./ProductClientComp";
 import { columns } from "@/components/ui/Product/ProductColumn";
+import { getProducts } from "@/actions/get-products";
 
 const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
-  const products = await prisma.product.findMany({
-    where: {
-      storeId: storeId,
-    },
-    include: {
-      // category: true,
-      // size: true,
-      color: true,
-      brand: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const products = await getProducts(storeId)
 
   const formattedProducts = products.map((item) => ({
     id: item.id,
@@ -30,12 +17,6 @@ const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
     brand: item.brand.name,
     quantity: item.quantityAvailable,
-
-    // description: item?.description?.map((description: string) => description),
-    // isFeatured: item.isFeatured,
-    // category: item.category.name,
-    // isArchived: item.isArchived,
-    // ratings: item?.ratings,
   }));
   return (
     <>

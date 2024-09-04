@@ -19,10 +19,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { setSelectedDateOrders, setSelectedDateRevenue } from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
 const TotalRevenue = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue")
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue"),
 );
 const Sales = lazy(
-  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales")
+  () => import("@/app/(dashboard)/[storeId]/(routes)/components/Sales"),
 );
 const ProductInStock = lazy(() => import("./ProductInStock"));
 
@@ -44,6 +44,9 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
     from: new Date(currentYear, currentMonth, 1),
     to: addDays(new Date(currentYear, currentMonth, 30), 0),
   });
+
+  // const { data } = useS
+
   const { data: orders, isLoading } = useSWR<IExtendedOrder[]>(
     `/api/${storeId}/order`,
     fetcher,
@@ -52,7 +55,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       onError(err) {
         console.log(`Error in getOrders`, err);
       },
-    }
+    },
   );
 
   const handleMonthChange = (date: DateRange | undefined) => {
@@ -101,7 +104,8 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
 
     const currMonthOrders =
       orders?.filter(
-        (order) => new Date(order.createdAt).getMonth() === Number(currentMonth)
+        (order) =>
+          new Date(order.createdAt).getMonth() === Number(currentMonth),
       ) || [];
     console.log(currMonthOrders, "currMonthOrders");
 
@@ -131,7 +135,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !selectedDateRange && "text-muted-foreground"
+              !selectedDateRange && "text-muted-foreground",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />

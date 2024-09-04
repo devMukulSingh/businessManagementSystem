@@ -22,10 +22,10 @@ export type ProductColumn = {
   // description: string | undefined;
 };
 export const columns: ColumnDef<ProductColumn>[] = [
-  {
-    accessorKey: "id",
-    header: "Id",
-  },
+  // {
+  //   accessorKey: "id",
+  //   header: "Id",
+  // },
   {
     accessorKey: "name",
     header: "Name",

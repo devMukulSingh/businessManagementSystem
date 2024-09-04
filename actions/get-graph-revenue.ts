@@ -1,28 +1,21 @@
 import { prisma } from "@/lib/prisma";
+import { cache } from "react";
+import { getOrders } from "./get-orders";
 
 export interface IgraphData {
   name: string;
   total: number;
 }
 
-export const getGraphRevenue = async (storeId: string) => {
+export const getGraphRevenue = cache(async (storeId: string) => {
   try {
-    const orders = await prisma.order.findMany({
-      where: {
-        storeId,
-        dueAmount: {
-          equals: 0,
-        },
-      },
-      select: {
-        product: true,
-        orderPrice: true
-      },
-    });
+    console.log("graph");
+
+    const orders = await getOrders(storeId)
 
     const totalOrders = orders.map((item) => ({
       ...item.product,
-      orderPrice: item.orderPrice
+      orderPrice: item.orderPrice,
     }));
 
     const graphData: IgraphData[] = [
@@ -42,26 +35,24 @@ export const getGraphRevenue = async (storeId: string) => {
 
     let i = 0;
     if (totalOrders.length > 0) {
-        let totalMonthlyRevenue = 0;
+      let totalMonthlyRevenue = 0;
       for (let obj of graphData) {
-          //getting totalRevenue of a particular month
-          totalMonthlyRevenue = totalOrders
+        //getting totalRevenue of a particular month
+        totalMonthlyRevenue =
+          totalOrders
             .filter((item) => item.createdAt.getMonth() === i)
             .reduce((acc, next) => {
-              if(next.orderPrice)
-              return acc  + next.orderPrice;
+              if (next.orderPrice) return acc + next.orderPrice;
               else return 0;
             }, 0) || 0;
-          //inserting total revenue of particular month in the graphData array
-          obj.total = totalMonthlyRevenue;
-          i++;
-        }
+        //inserting total revenue of particular month in the graphData array
+        obj.total = totalMonthlyRevenue;
+        i++;
       }
-      return graphData;
     }
-    
-   catch (e) {
+    return graphData;
+  } catch (e) {
     console.log(`Error in getGraphRevenue ${e}`);
     return [];
   }
-};
+});
