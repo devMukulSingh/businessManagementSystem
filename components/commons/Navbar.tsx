@@ -1,22 +1,18 @@
 import { UserButton, auth } from "@clerk/nextjs";
 import StoreSwitcher from "./StoreSwitcher";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { Separator } from "../ui/separator";
 import NavLinks from "./NavLinks";
 import Menu from "./Menu";
 import { ThemeToggler } from "./ThemeToggler";
+import { getAllStores } from "@/actions/get-all-stores";
 
 const Navbar = async ({ storeId }: { storeId: string }) => {
   const { userId } = auth();
 
   if (!userId) redirect("/");
 
-  const store = await prisma.store.findMany({
-    where: {
-      userId,
-    },
-  });
+  const store = await getAllStores(userId)
 
   return (
     <>

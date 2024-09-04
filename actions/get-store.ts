@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-export const getStores = cache(async () => {
+export const getStore = cache(async () => {
   const { userId } = auth();
   if (!userId) redirect("/sign-in");
   const store = await prisma.store.findFirst({
