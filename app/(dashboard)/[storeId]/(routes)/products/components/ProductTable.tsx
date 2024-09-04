@@ -7,7 +7,7 @@ import { columns } from "@/components/ui/Product/ProductColumn";
 import { getProducts } from "@/actions/get-products";
 
 const ProductTable: FC<ProductClientCompProps> = async ({ storeId }) => {
-  const products = await getProducts(storeId)
+  const products = await getProducts(storeId);
 
   const formattedProducts = products.map((item) => ({
     id: item.id,

@@ -7,6 +7,7 @@ interface SalesProps {}
 
 const Sales: FC<SalesProps> = ({}) => {
   const { selectedDateOrders } = useAppSelector((state) => state.adminSlice);
+  
 
   return (
     <>

@@ -10,7 +10,7 @@ export const getOrders = cache(async (storeId: string) => {
         storeId,
       },
       include: {
-        product:true
+        product: true,
       },
       orderBy: {
         createdAt: "desc",

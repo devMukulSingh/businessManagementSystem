@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { getOrders } from "@/actions/get-orders";
 
 const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
-  const orders = await getOrders(storeId)
+  const orders = await getOrders(storeId);
 
   const formattedOrders = orders.map((item) => ({
     id: item.product.id,
@@ -18,7 +18,7 @@ const OrderTable: FC<OrdersClientCompProps> = async ({ storeId }) => {
     dueAmount: item.dueAmount,
     isPaymentDue: item.dueAmount === 0 ? "No" : "Yes",
     customerName: item.customerName,
-    quantity:item.quantity
+    quantity: item.quantity,
   }));
 
   return (

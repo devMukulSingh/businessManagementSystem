@@ -8,11 +8,11 @@ import { getBrands } from "@/actions/get-brands";
 
 const BrandTable: FC<BrandClientCompProps> = async ({ storeId }) => {
   const brands = await getBrands(storeId);
-   const formattedbrands: BrandColumn[] = brands.map((item) => ({
-     id: item.id,
-     name: item.name,
-     createdAt: format(item.createdAt, "MMMM do, yyyy"),
-   }));
+  const formattedbrands: BrandColumn[] = brands.map((item) => ({
+    id: item.id,
+    name: item.name,
+    createdAt: format(item.createdAt, "MMMM do, yyyy"),
+  }));
   return (
     <>
       <Header brand={brands} />

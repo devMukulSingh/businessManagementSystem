@@ -13,7 +13,7 @@ export type OrdersColumn = {
   isPaymentDue: string;
   customerName: string | null;
   orderPrice: number | null;
-  quantity:number | null
+  quantity: number | null;
 };
 
 export const columns: ColumnDef<OrdersColumn>[] = [

@@ -11,7 +11,7 @@ export const getGraphRevenue = cache(async (storeId: string) => {
   try {
     console.log("graph");
 
-    const orders = await getOrders(storeId)
+    const orders = await getOrders(storeId);
 
     const totalOrders = orders.map((item) => ({
       ...item.product,

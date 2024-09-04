@@ -3,7 +3,6 @@ import SettingsForm from "@/app/(dashboard)/[storeId]/(routes)/settings/componen
 import { redirect } from "next/navigation";
 
 const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
-
   const store = await getStores();
 
   if (!store) redirect("/");

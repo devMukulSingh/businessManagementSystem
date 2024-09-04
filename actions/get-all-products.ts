@@ -12,6 +12,6 @@ export const getAllProducts = cache(async (storeId: string) => {
     0,
   );
   console.log("products");
-  
+
   return totalProducts;
 });
