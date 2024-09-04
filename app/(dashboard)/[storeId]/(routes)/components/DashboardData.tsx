@@ -101,7 +101,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
   useEffect(() => {
     //setting currentmonth transactions in state
     console.log(orders, "orders");
-    
+
     const currMonthOrders =
       orders?.filter(
         (order) =>
@@ -111,7 +111,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
 
     const selectedDateSales = currMonthOrders.reduce((acc, next) => {
       if (next.quantity) return acc + next?.quantity;
-      else return acc + 0
+      else return acc + 0;
     }, 0);
     // console.log(selectedDateSales, "selectedDateSales");
 
@@ -124,7 +124,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
         else return acc + 0;
       }, 0);
       // console.log(filteredRevenue,"filterdRevenue");
-      
+
       dispatch(setSelectedDateRevenue(filteredRevenue));
     }
   }, [orders]);

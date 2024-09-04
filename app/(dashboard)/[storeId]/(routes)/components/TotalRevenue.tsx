@@ -7,7 +7,7 @@ interface TotalRevenueProps {}
 
 const TotalRevenue: FC<TotalRevenueProps> = ({}) => {
   const { selectedDateRevenue } = useAppSelector((state) => state.adminSlice);
-  
+
   return (
     <>
       <Card className="">

@@ -43,7 +43,7 @@ export const getGraphRevenue = cache(async (storeId: string) => {
             .filter((item) => item.createdAt.getMonth() === i)
             .reduce((acc, next) => {
               if (next.orderPrice) return acc + next.orderPrice;
-              else return 0;
+              else return acc + 0;
             }, 0) || 0;
         //inserting total revenue of particular month in the graphData array
         obj.total = totalMonthlyRevenue;
