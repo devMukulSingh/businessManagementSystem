@@ -82,7 +82,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
     }
     const selectedDateSales = selectedDateOrders.reduce((acc, next) => {
       if (next.quantity) return acc + next.quantity;
-      return 0;
+      else return acc + 0;
     }, 0);
 
     dispatch(setSelectedDateOrders(selectedDateSales));
@@ -91,7 +91,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       const filteredRevenue =
         selectedDateOrders.reduce((acc, curr) => {
           if (curr.orderPrice) return acc + curr.orderPrice;
-          else return 0;
+          else return acc +  0;
         }, 0) || 0;
 
       dispatch(setSelectedDateRevenue(filteredRevenue));

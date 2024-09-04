@@ -12,7 +12,7 @@ const Navbar = async ({ storeId }: { storeId: string }) => {
 
   if (!userId) redirect("/");
 
-  const store = await getAllStores(userId)
+  const store = await getAllStores(userId);
 
   return (
     <>

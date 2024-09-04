@@ -1,4 +1,4 @@
-import { getStore} from "@/actions/get-store";
+import { getStore } from "@/actions/get-store";
 import SettingsForm from "@/app/(dashboard)/[storeId]/(routes)/settings/components/SettingsForm";
 import { redirect } from "next/navigation";
 

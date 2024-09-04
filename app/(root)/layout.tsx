@@ -14,7 +14,6 @@ export default async function RootLayout({
 
   const store = await getStore();
   console.log(store);
-  
 
   if (store) redirect(`/${store.id}`);
 
