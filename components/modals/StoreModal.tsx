@@ -56,9 +56,9 @@ export const StoreModal = () => {
     },
   });
 
-  const onSubmit = async (values: TformFieldValues) =>{
+  const onSubmit = async (values: TformFieldValues) => {
     await trigger({ name: values.name, user });
-  }
+  };
 
   return (
     <Modal

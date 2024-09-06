@@ -1,13 +1,16 @@
 import { prisma } from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { name, user } = body;
     
+    const body = await req.json();
+    const { name } = body;
+    const user  = await currentUser();
+
     if (!user) {
-      return NextResponse.json({ error: "user is required" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 403 });
     }
 
     if (!name) {
@@ -16,14 +19,14 @@ export async function POST(req: Request) {
 
     const store = await prisma.store.create({
       data: {
-        userId: user.id,
+        userId:user.id,
         name,
       },
     });
 
     const isUserExists = await prisma.user.findUnique({
       where: {
-        id: user.id,
+        id:user.id,
       },
     });
 
@@ -31,8 +34,8 @@ export async function POST(req: Request) {
       await prisma.user.create({
         data: {
           id: user.id,
-          name: user.fullName,
-          email: user.primaryEmailAddress.emailAddress,
+          name: user.username || "",
+          email: user.emailAddresses[0].emailAddress,
         },
       });
 
