@@ -4,15 +4,21 @@ interface IinitialState {
   isOpen: boolean;
   loading: boolean;
   openSidebar: boolean;
-  selectedDateOrders: number;
-  selectedDateRevenue: number;
+  dasboardData : {
+    selectedDateOrders : number,
+    storeId:string,
+    selectedDateRevenue:number
+  }[]
 }
 const initialState: IinitialState = {
   isOpen: false,
   loading: false,
   openSidebar: false,
-  selectedDateOrders: 0,
-  selectedDateRevenue: 0,
+  dasboardData:[{
+    selectedDateOrders:0,
+    selectedDateRevenue:0,
+    storeId:''
+  }],
 };
 
 export const adminSlice = createSlice({
@@ -28,12 +34,30 @@ export const adminSlice = createSlice({
     setOpenSidebar: (state) => {
       state.openSidebar = !state.openSidebar;
     },
-    setSelectedDateOrders: (state, action) => {
-      state.selectedDateOrders = action.payload;
+    setDashboardData : ( state,action) => {
+      const { storeId, selectedDateOrders,selectedDateRevenue } = action.payload;
+      for(let i = 0; i < state.dasboardData.length; i++){
+        if(state.dasboardData[i].storeId === storeId){
+          state.dasboardData[i].selectedDateOrders = selectedDateOrders;
+          state.dasboardData[i].selectedDateRevenue = selectedDateRevenue;
+        }
+      }
     },
-    setSelectedDateRevenue: (state, action) => {
-      state.selectedDateRevenue = action.payload;
+    pushDasboardData: (state, action) => {
+      const { storeId, selectedDateOrders, selectedDateRevenue } = action.payload;
+      const storeAlready =  state.dasboardData.find(item => item.storeId===storeId);
+      if(storeAlready) setDashboardData({
+        ...action.payload
+      })
+      else state.dasboardData.push({
+        storeId,
+        selectedDateOrders,
+        selectedDateRevenue: selectedDateRevenue
+      })
+
     },
+
+
   },
 });
 
@@ -42,6 +66,7 @@ export const {
   setDialog,
   setLoading,
   setOpenSidebar,
-  setSelectedDateOrders,
-  setSelectedDateRevenue,
+  setDashboardData,
+  pushDasboardData
+
 } = adminSlice.actions;

@@ -4,7 +4,6 @@ import useSWR from "swr";
 import { cn, fetcher, months } from "@/lib/utils";
 import { Order, Product } from "@prisma/client";
 import CardSkeleton from "./CardSkeleton";
-import dynamic from "next/dynamic";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -16,8 +15,9 @@ import { Button } from "@/components/ui/button";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { useAppDispatch } from "@/store/hooks";
-import { setSelectedDateOrders, setSelectedDateRevenue } from "@/store/slice";
+import { pushDasboardData, setDashboardData, } from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
+
 const TotalRevenue = lazy(
   () => import("@/app/(dashboard)/[storeId]/(routes)/components/TotalRevenue"),
 );
@@ -85,17 +85,21 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       else return acc + 0;
     }, 0);
 
-    dispatch(setSelectedDateOrders(selectedDateSales));
-
-    if (selectedDateOrders.length > 0) {
+    if (selectedDateSales) {
       const filteredRevenue =
         selectedDateOrders.reduce((acc, curr) => {
           if (curr.orderPrice) return acc + curr.orderPrice;
           else return acc + 0;
         }, 0) || 0;
 
-      dispatch(setSelectedDateRevenue(filteredRevenue));
-    } else dispatch(setSelectedDateRevenue(0));
+      dispatch(
+        setDashboardData({
+          storeId,
+          selectedDateRevenue: filteredRevenue,
+          selectedDateOrders: selectedDateSales,
+        })
+      );
+    } ;
   };
 
   useEffect(() => {
@@ -109,13 +113,13 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       ) || [];
     console.log(currMonthOrders, "currMonthOrders");
 
-    const selectedDateSales = currMonthOrders.reduce((acc, next) => {
+    const selectedDateOrders = currMonthOrders.reduce((acc, next) => {
       if (next.quantity) return acc + next?.quantity;
       else return acc + 0;
     }, 0);
     // console.log(selectedDateSales, "selectedDateSales");
 
-    dispatch(setSelectedDateOrders(selectedDateSales));
+    // dispatch(setSelectedDateOrders({storeId, selectedDateOrders:selectedDateSales}));
 
     //setting selected month revenue in state
     if (currMonthOrders.length > 0) {
@@ -125,7 +129,13 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
       }, 0);
       // console.log(filteredRevenue,"filterdRevenue");
 
-      dispatch(setSelectedDateRevenue(filteredRevenue));
+      dispatch(
+        pushDasboardData({
+          storeId,
+          selectedDateRevenue: filteredRevenue,
+          selectedDateOrders,
+        })
+      );
     }
   }, [orders]);
   return (

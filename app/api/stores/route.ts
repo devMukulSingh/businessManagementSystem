@@ -4,10 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    
     const body = await req.json();
     const { name } = body;
-    const user  = await currentUser();
+    const user = await currentUser();
 
     if (!user) {
       return NextResponse.json({ error: "Unauthenticated" }, { status: 403 });
@@ -19,14 +18,14 @@ export async function POST(req: Request) {
 
     const store = await prisma.store.create({
       data: {
-        userId:user.id,
+        userId: user.id,
         name,
       },
     });
 
     const isUserExists = await prisma.user.findUnique({
       where: {
-        id:user.id,
+        id: user.id,
       },
     });
 
