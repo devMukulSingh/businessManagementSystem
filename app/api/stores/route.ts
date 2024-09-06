@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { name, user } = body;
-
+    
     if (!user) {
       return NextResponse.json({ error: "user is required" }, { status: 401 });
     }
