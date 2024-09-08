@@ -8,9 +8,11 @@ interface SalesProps {}
 
 const Sales: FC<SalesProps> = ({}) => {
   const { storeId } = useParams();
-  const { dasboardData:dashboardDataArr } = useAppSelector((state) => state.adminSlice);
+  const { dasboardData: dashboardDataArr } = useAppSelector(
+    (state) => state.adminSlice,
+  );
   const dasboardData = dashboardDataArr.find(
-    (item) => item.storeId === storeId
+    (item) => item.storeId === storeId,
   );
 
   return (

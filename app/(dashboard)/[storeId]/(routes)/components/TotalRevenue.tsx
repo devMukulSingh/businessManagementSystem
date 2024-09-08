@@ -7,11 +7,11 @@ import { FC } from "react";
 interface TotalRevenueProps {}
 
 const TotalRevenue: FC<TotalRevenueProps> = ({}) => {
-   const { storeId } = useParams();
-   const { dasboardData:dasboardDataArr } = useAppSelector((state) => state.adminSlice);
-   const dasboardData = dasboardDataArr.find(
-     (item) => item.storeId === storeId
-   );
+  const { storeId } = useParams();
+  const { dasboardData: dasboardDataArr } = useAppSelector(
+    (state) => state.adminSlice,
+  );
+  const dasboardData = dasboardDataArr.find((item) => item.storeId === storeId);
 
   return (
     <>

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { useAppDispatch } from "@/store/hooks";
-import { pushDasboardData, setDashboardData, } from "@/store/slice";
+import { pushDasboardData, setDashboardData } from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
 
 const TotalRevenue = lazy(
@@ -97,9 +97,14 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
           storeId,
           selectedDateRevenue: filteredRevenue,
           selectedDateOrders: selectedDateSales,
-        })
+        }),
       );
-    } ;
+    }
+    else dispatch(setDashboardData({
+      storeId,
+      selectedDateOrders:0,
+      selectedDateRevenue:0
+    }))
   };
 
   useEffect(() => {
@@ -134,7 +139,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
           storeId,
           selectedDateRevenue: filteredRevenue,
           selectedDateOrders,
-        })
+        }),
       );
     }
   }, [orders]);

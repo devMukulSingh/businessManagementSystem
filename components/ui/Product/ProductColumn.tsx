@@ -14,12 +14,7 @@ export type ProductColumn = {
   quantity: number;
   price: number;
   brand: string;
-  // category: string;
-  // isFeatured: boolean;
-  // isArchived: boolean;
-  // createdAt: string;
-  // ratings: Decimal | null;
-  // description: string | undefined;
+
 };
 export const columns: ColumnDef<ProductColumn>[] = [
   // {
@@ -35,10 +30,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Price",
     cell: ({ row }) => <>₹{row.original.price}</>,
   },
-  {
-    accessorKey: "color.name",
-    header: "Color",
-  },
+  // {
+  //   accessorKey: "color.name",
+  //   header: "Color",
+  // },
 
   {
     accessorKey: "brand",
