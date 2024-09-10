@@ -14,8 +14,8 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { useAppDispatch } from "@/store/hooks";
-import { pushDasboardData, setDashboardData } from "@/store/slice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { pushDasboardData, setDashboardData, setSelectedDateRange } from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
 
 const TotalRevenue = lazy(
@@ -36,14 +36,15 @@ interface DashboardDataProps {
 
 const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
   const dispatch = useAppDispatch();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const [selectedDateRange, setSelectedDateRange] = useState<
-    DateRange | undefined
-  >({
-    from: new Date(currentYear, currentMonth, 1),
-    to: addDays(new Date(currentYear, currentMonth, 30), 0),
-  });
+  const  {  selectedDateRange  } = useAppSelector( state => state.adminSlice);
+const currentMonth = new Date().getMonth();
+const currentYear = new Date().getFullYear();
+  // const [selectedDateRange, setSelectedDateRange] = useState<
+  //   DateRange | undefined
+  // >({
+  //   from: new Date(currentYear, currentMonth, 1),
+  //   to: addDays(new Date(currentYear, currentMonth, 30), 0),
+  // });
 
   // const { data } = useS
 
@@ -59,7 +60,7 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
   );
 
   const handleMonthChange = (date: DateRange | undefined) => {
-    setSelectedDateRange(date);
+    dispatch(setSelectedDateRange(date));
     let selectedDateOrders: IExtendedOrder[] = [];
     const from = date?.from?.setHours(0, 0, 0, 0) || Date.now();
     const to = date?.to?.setHours(0, 0, 0, 0) || Date.now();
@@ -99,17 +100,18 @@ const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
           selectedDateOrders: selectedDateSales,
         }),
       );
-    }
-    else dispatch(setDashboardData({
-      storeId,
-      selectedDateOrders:0,
-      selectedDateRevenue:0
-    }))
+    } else
+      dispatch(
+        setDashboardData({
+          storeId,
+          selectedDateOrders: 0,
+          selectedDateRevenue: 0,
+        }),
+      );
   };
 
   useEffect(() => {
     //setting currentmonth transactions in state
-    console.log(orders, "orders");
 
     const currMonthOrders =
       orders?.filter(

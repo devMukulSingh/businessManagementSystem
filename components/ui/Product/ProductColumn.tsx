@@ -14,7 +14,6 @@ export type ProductColumn = {
   quantity: number;
   price: number;
   brand: string;
-
 };
 export const columns: ColumnDef<ProductColumn>[] = [
   // {

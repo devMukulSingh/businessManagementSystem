@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addDays } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 interface IinitialState {
   isOpen: boolean;
@@ -9,7 +11,10 @@ interface IinitialState {
     storeId: string;
     selectedDateRevenue: number;
   }[];
+  selectedDateRange: DateRange | undefined
 }
+const currentMonth = new Date().getMonth();
+const currentYear = new Date().getFullYear();
 const initialState: IinitialState = {
   isOpen: false,
   loading: false,
@@ -19,8 +24,13 @@ const initialState: IinitialState = {
       selectedDateOrders: 0,
       selectedDateRevenue: 0,
       storeId: "",
+
     },
   ],
+  selectedDateRange: {
+    from: new Date(currentYear, currentMonth, 1),
+    to: addDays(new Date(currentYear, currentMonth, 30), 0),
+  }
 };
 
 export const adminSlice = createSlice({
@@ -61,8 +71,12 @@ export const adminSlice = createSlice({
           storeId,
           selectedDateOrders,
           selectedDateRevenue: selectedDateRevenue,
+
         });
     },
+    setSelectedDateRange : (state,action) => {
+      state.selectedDateRange = action.payload;
+    }
   },
 });
 
@@ -73,4 +87,5 @@ export const {
   setOpenSidebar,
   setDashboardData,
   pushDasboardData,
+  setSelectedDateRange
 } = adminSlice.actions;
