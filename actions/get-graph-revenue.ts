@@ -9,15 +9,15 @@ export interface IgraphData {
 
 export const getGraphRevenue = cache(async (storeId: string) => {
   try {
-    console.log("graph");
 
     const orders = await getOrders(storeId);
 
     const totalOrders = orders.map((item) => ({
       ...item.product,
+      createdAt : item.createdAt,
       orderPrice: item.orderPrice,
     }));
-
+    
     const graphData: IgraphData[] = [
       { name: "Jan", total: 0 },
       { name: "Feb", total: 0 },

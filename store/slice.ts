@@ -11,7 +11,7 @@ interface IinitialState {
     storeId: string;
     selectedDateRevenue: number;
   }[];
-  selectedDateRange: DateRange | undefined
+  selectedDateRange: DateRange | undefined;
 }
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
@@ -24,13 +24,12 @@ const initialState: IinitialState = {
       selectedDateOrders: 0,
       selectedDateRevenue: 0,
       storeId: "",
-
     },
   ],
   selectedDateRange: {
     from: new Date(currentYear, currentMonth, 1),
     to: addDays(new Date(currentYear, currentMonth, 30), 0),
-  }
+  },
 };
 
 export const adminSlice = createSlice({
@@ -71,12 +70,11 @@ export const adminSlice = createSlice({
           storeId,
           selectedDateOrders,
           selectedDateRevenue: selectedDateRevenue,
-
         });
     },
-    setSelectedDateRange : (state,action) => {
+    setSelectedDateRange: (state, action) => {
       state.selectedDateRange = action.payload;
-    }
+    },
   },
 });
 
@@ -87,5 +85,5 @@ export const {
   setOpenSidebar,
   setDashboardData,
   pushDasboardData,
-  setSelectedDateRange
+  setSelectedDateRange,
 } = adminSlice.actions;

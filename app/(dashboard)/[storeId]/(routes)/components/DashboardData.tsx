@@ -15,7 +15,11 @@ import { Button } from "@/components/ui/button";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { pushDasboardData, setDashboardData, setSelectedDateRange } from "@/store/slice";
+import {
+  pushDasboardData,
+  setDashboardData,
+  setSelectedDateRange,
+} from "@/store/slice";
 import { OrdersColumn } from "@/components/ui/Order/OrdersColumn";
 
 const TotalRevenue = lazy(
@@ -36,9 +40,9 @@ interface DashboardDataProps {
 
 const DashboardData: FC<DashboardDataProps> = ({ storeId }) => {
   const dispatch = useAppDispatch();
-  const  {  selectedDateRange  } = useAppSelector( state => state.adminSlice);
-const currentMonth = new Date().getMonth();
-const currentYear = new Date().getFullYear();
+  const { selectedDateRange } = useAppSelector((state) => state.adminSlice);
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
   // const [selectedDateRange, setSelectedDateRange] = useState<
   //   DateRange | undefined
   // >({

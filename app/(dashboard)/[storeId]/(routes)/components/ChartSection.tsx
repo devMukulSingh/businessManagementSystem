@@ -7,6 +7,7 @@ interface ChartSectionProps {
 
 const ChartSection: React.FC<ChartSectionProps> = async ({ storeId }) => {
   const graphData = await getGraphRevenue(storeId);
+  
 
   return <Chart graphData={graphData} />;
 };
